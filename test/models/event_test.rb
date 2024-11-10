@@ -69,4 +69,3 @@ class EventTest < ActiveSupport::TestCase
     assert_respond_to @event, :guests
   end
 end
-
