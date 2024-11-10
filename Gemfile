@@ -31,6 +31,12 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+# Use bootstrap to design frontend
+gem "bootstrap", "~> 5.3.3"
+gem "bootstrap-icons"
+gem "jquery-rails"
+gem "dartsass-sprockets"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
@@ -43,11 +49,17 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Mini test suite
+  gem "minitest", "~> 5.25", ">= 5.25.1"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Annotates model table schema on model files
+  gem "annotate"
 end
 
 group :test do

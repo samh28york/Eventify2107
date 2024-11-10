@@ -3,12 +3,11 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   scan_ruby:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,13 +17,31 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+
+      - name: Ensure Ruby is installed
+        run: |
+          ruby -v  # Confirm Ruby version
+          which ruby  # Confirm Ruby path
+
+      - name: Fix Ruby shebang in bin scripts
+        run: |
+          for file in bin/*; do
+            # Update shebang to use ruby instead of ruby.exe
+            sed -i 's/ruby.exe/ruby/' "$file"
+          done
+        shell: bash
+
+      - name: Verify shebang lines in bin scripts
+        run: head -n 1 bin/*  # Prints the first line of each script for verification
+
+      - name: Set execute permissions on scripts
+        run: chmod +x bin/*
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
 
   scan_js:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,6 +51,9 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
+
+      - name: Grant execute permissions to all files in bin/
+        run: chmod +x bin/*
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
@@ -50,18 +70,14 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Grant execute permissions to all files in bin/
+        run: chmod +x bin/*
+
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
   test:
     runs-on: ubuntu-latest
-
-    # services:
-    #  redis:
-    #    image: redis
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable curl libjemalloc2 libvips sqlite3
@@ -75,11 +91,39 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Ensure Ruby is installed
+        run: |
+          ruby -v  # Confirm Ruby version
+          which ruby  # Confirm Ruby path
+
+      - name: Fix Ruby shebang in bin scripts
+        run: |
+          for file in bin/*; do
+            # Ensure Ruby is used instead of ruby.exe in the shebang
+            if [ -f "$file" ]; then
+              sed -i 's|ruby.exe|ruby|' "$file"  # Replace ruby.exe with ruby
+            fi
+          done
+        shell: bash
+
+      - name: Verify shebang lines in bin scripts
+        run: |
+          for file in bin/*; do
+            # Print the first line of each file to confirm shebang is fixed
+            head -n 1 "$file"
+          done
+
+      - name: Grant execute permissions to all files in bin/
+        run: chmod +x bin/*
+
+      - name: Setup Database
+        run: |
+          bin/rails db:create db:migrate RAILS_ENV=test
+
       - name: Run tests
         env:
           RAILS_ENV: test
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+        run: bin/rails test test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
