@@ -1,4 +1,4 @@
-class GuestListsController < ApplicationController
+class GuestlistsController < ApplicationController
     before_action :set_event
     
     def index
