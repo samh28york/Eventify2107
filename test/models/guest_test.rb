@@ -88,4 +88,3 @@ class GuestTest < ActiveSupport::TestCase
     assert_not @guest.authenticate("wrongpassword")
   end
 end
-

@@ -19,9 +19,9 @@ class Guest < ApplicationRecord
     has_many :events, through: :guest_lists
     has_many :gift_registries
     has_many :gifts, through: :gift_registries
-  
+
     has_and_belongs_to_many :events
-  
+
     validates :email, presence: true, uniqueness: true
     validates :password, presence: true, length: { minimum: 6 }
-  end
+end
