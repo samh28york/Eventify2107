@@ -1,21 +1,39 @@
 Rails.application.routes.draw do
-  get "events/index"
-  get "events/show"
-  get "events/new"
-  get "events/create"
-  get "events/edit"
-  get "events/update"
-  get "events/destroy"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  get "guest_lists/index"
+  get "home/index"
+  root "home#index"
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "login/guest", to: "sessions#new_guest", as: "new_guest_session"
+  get "login/organizer", to: "sessions#new_organizer", as: "new_organizer_session"
 
-  # Render dynamic PWA files from app/views/pwa/*
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  post "guest_sessions", to: "sessions#create_guest"
+  post "organizer_sessions", to: "sessions#create_organizer"
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  get "register/guest", to: "registrations#new_guest", as: "new_guest_registration"
+  get "register/organizer", to: "registrations#new_organizer", as: "new_organizer_registration"
+
+  post "guest_registrations", to: "registrations#create_guest"
+  post "organizer_registrations", to: "registrations#create_organizer"
+
+  get "guest_home", to: "home#guest_home", as: "guest_home"
+  get "organizer_home", to: "home#organizer_home", as: "organizer_home"
+
+  resources :events do
+    member do
+      post "add_guest"  # Adds a guest to a specific event
+    end
+    resources :guest_lists
+    resources :budgets
+    resources :itineraries
+    resources :gift_registries
+    resources :notifications
+  end
+
+  resources :guests, only: [ :index ] do
+    patch :update_attendance, on: :collection
+  end
+
+  resources :events do
+    resources :guest_lists, only: [ :index ]
+  end
 end

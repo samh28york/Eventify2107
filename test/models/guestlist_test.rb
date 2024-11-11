@@ -6,7 +6,7 @@ class GuestlistTest < ActiveSupport::TestCase
   test "should belong to guest" do
     guest = Guest.create(email: "guest@example.com", password: "password", first_name: "John", last_name: "Doe")
     event = Event.create(title: "Sample Event", start_time: Time.now, end_time: Time.now + 2.hours, location: "Sample Location")
-    
+
     guestlist = Guestlist.new(guest_id: guest.id, event_id: event.id)
     assert_respond_to guestlist, :guest
   end
@@ -15,7 +15,7 @@ class GuestlistTest < ActiveSupport::TestCase
   test "should belong to event" do
     guest = Guest.create(email: "guest@example.com", password: "password", first_name: "John", last_name: "Doe")
     event = Event.create(title: "Sample Event", start_time: Time.now, end_time: Time.now + 2.hours, location: "Sample Location")
-    
+
     guestlist = Guestlist.new(guest_id: guest.id, event_id: event.id)
     assert_respond_to guestlist, :event
   end
@@ -24,7 +24,7 @@ class GuestlistTest < ActiveSupport::TestCase
   test "should be valid with guest_id and event_id" do
     guest = Guest.create(email: "guest@example.com", password: "password", first_name: "John", last_name: "Doe")
     event = Event.create(title: "Sample Event", start_time: Time.now, end_time: Time.now + 2.hours, location: "Sample Location")
-    
+
     guestlist = Guestlist.new(guest_id: guest.id, event_id: event.id)
     assert guestlist.valid?
   end
@@ -50,8 +50,8 @@ class GuestlistTest < ActiveSupport::TestCase
     guest = Guest.create(email: "guest@example.com", password: "password", first_name: "John", last_name: "Doe")
     event = Event.create(title: "Sample Event", start_time: Time.now, end_time: Time.now + 2.hours, location: "Sample Location")
     guestlist = guest.guestlists.create(event_id: event.id)
-    
-    assert_difference('Guestlist.count', -1) do
+
+    assert_difference("Guestlist.count", -1) do
       guest.destroy
     end
   end
@@ -61,8 +61,8 @@ class GuestlistTest < ActiveSupport::TestCase
     guest = Guest.create(email: "guest@example.com", password: "password", first_name: "John", last_name: "Doe")
     event = Event.create(title: "Sample Event", start_time: Time.now, end_time: Time.now + 2.hours, location: "Sample Location")
     guestlist = event.guestlists.create(guest_id: guest.id)
-    
-    assert_difference('Guestlist.count', -1) do
+
+    assert_difference("Guestlist.count", -1) do
       event.destroy
     end
   end
@@ -71,7 +71,7 @@ class GuestlistTest < ActiveSupport::TestCase
   test "should accept valid rsvp_status" do
     guest = Guest.create(email: "guest@example.com", password: "password", first_name: "John", last_name: "Doe")
     event = Event.create(title: "Sample Event", start_time: Time.now, end_time: Time.now + 2.hours, location: "Sample Location")
-    
+
     guestlist = Guestlist.new(guest_id: guest.id, event_id: event.id, rsvp_status: "Accepted")
     assert guestlist.valid?
   end
@@ -79,7 +79,7 @@ class GuestlistTest < ActiveSupport::TestCase
   test "should not accept invalid rsvp_status" do
     guest = Guest.create(email: "guest@example.com", password: "password", first_name: "John", last_name: "Doe")
     event = Event.create(title: "Sample Event", start_time: Time.now, end_time: Time.now + 2.hours, location: "Sample Location")
-    
+
     guestlist = Guestlist.new(guest_id: guest.id, event_id: event.id, rsvp_status: "Maybe")
     assert_not guestlist.valid?
   end

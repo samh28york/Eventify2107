@@ -90,4 +90,3 @@ class OrganizerTest < ActiveSupport::TestCase
     assert_includes organizer.events, event, "Organizer does not have the event"
   end
 end
-
