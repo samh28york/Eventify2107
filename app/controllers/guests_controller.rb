@@ -2,7 +2,7 @@ class GuestsController < ApplicationController
     before_action :authenticate_user!
 
     def index
-      @events = Event.joins(:guest_list).where(guest_lists: { guest_id: current_user.id })
+      @events = Event.joins(:GuestList).where(guest_lists: { guest_id: current_user.id })
     end
 
     def update_attendance

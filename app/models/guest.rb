@@ -16,7 +16,7 @@
 class Guest < ApplicationRecord
     has_secure_password
     has_many :guest_lists, dependent: :destroy
-    has_many :events, through: :guestlists
+    has_many :events, through: :guest_lists
 
     has_and_belongs_to_many :events
 

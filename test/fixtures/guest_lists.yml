@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: guestlists
+# Table name: guest_lists
 #
 #  id          :integer          not null, primary key
 #  rsvp_status :string
