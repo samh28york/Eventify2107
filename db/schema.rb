@@ -32,16 +32,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_022230) do
     t.index ["guest_id"], name: "index_guest_lists_on_guest_id"
   end
 
-  create_table "guestlists", force: :cascade do |t|
-    t.string "rsvp_status"
-    t.integer "event_id", null: false
-    t.integer "guest_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["event_id"], name: "index_guestlists_on_event_id"
-    t.index ["guest_id"], name: "index_guestlists_on_guest_id"
-  end
-
   create_table "guests", force: :cascade do |t|
     t.string "email", null: false
     t.string "first_name"
@@ -66,7 +56,5 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_11_022230) do
 
   add_foreign_key "guest_lists", "events"
   add_foreign_key "guest_lists", "guests"
-  add_foreign_key "guestlists", "events"
-  add_foreign_key "guestlists", "guests"
   add_foreign_key "guests", "events"
 end

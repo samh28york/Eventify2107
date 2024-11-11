@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: guestlists
+# Table name: guest_lists
 #
 #  id          :integer          not null, primary key
 #  rsvp_status :string
@@ -9,7 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-class Guestlist < ApplicationRecord
+class GuestList < ApplicationRecord
     belongs_to :guests, dependent: :destroy
     belongs_to :event
 end

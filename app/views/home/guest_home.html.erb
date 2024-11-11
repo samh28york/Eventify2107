@@ -15,7 +15,7 @@
         <p><strong>Location:</strong> <%= event.location %></p>
         <p><strong>Description:</strong> <%= event.description %></p>
         <p><strong>Date:</strong> <%= event.date %></p>
-        <% guest_list_entry = Guestlist.find_by(guest_id: current_user.id, event_id: event.id) %>
+        <% guest_list_entry = GuestList.find_by(guest_id: current_user.id, event_id: event.id) %>
         <%= form_with url: update_attendance_guests_path, method: :patch, local: true do |form| %>
           <%= form.hidden_field :event_id, value: event.id %>
           <%= form.radio_button :rsvp_status, 'going', checked: guest_list_entry&.rsvp_status == 'going' %>
