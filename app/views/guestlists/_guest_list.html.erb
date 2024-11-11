@@ -1,0 +1,23 @@
+<!-- app/views/guest_lists/_guest_list.html.erb -->
+<h3>Guest List</h3>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Party Size</th>
+      <th>RSVP Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @guests.each do |guest| %>
+      <tr>
+        <td><%= guest.first_name %> <%= guest.last_name %></td>
+        <td><%= guest.email %></td>
+        <td><%= guest.party_size %></td>
+        <td><%= guest.guest_lists.find_by(event: @event)&.rsvp_status || "No Response" %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
