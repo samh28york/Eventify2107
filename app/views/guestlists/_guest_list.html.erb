@@ -11,13 +11,15 @@
     </tr>
   </thead>
   <tbody>
-    <% @guests.each do |guest| %>
-      <tr>
-        <td><%= guest.first_name %> <%= guest.last_name %></td>
-        <td><%= guest.email %></td>
-        <td><%= guest.party_size %></td>
-        <td><%= guest.guest_lists.find_by(event: @event)&.rsvp_status || "No Response" %></td>
-      </tr>
+    <% unless @guests.nil? %>
+      <% @guests.each do |guest| %>
+        <tr>
+          <td><%= guest.first_name %> <%= guest.last_name %></td>
+          <td><%= guest.email %></td>
+          <td><%= guest.party_size %></td>
+          <td><%= guest.guest_lists.find_by(event: @event)&.rsvp_status || "No Response" %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
