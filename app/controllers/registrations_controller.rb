@@ -21,7 +21,7 @@ class RegistrationsController < ApplicationController
       @organizer = Organizer.new(organizer_params)
       if @organizer.save
         session[:organizer_id] = @organizer.id
-        redirect_to organizer_home_path, notice: "Organizer account created successfully."
+        redirect_to events_path, notice: "Organizer account created successfully."
       else
         render :new_organizer
       end
