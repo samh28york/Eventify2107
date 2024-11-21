@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: guestlists
+# Table name: guest_lists
 #
 #  id          :integer          not null, primary key
 #  rsvp_status :string
@@ -9,7 +9,6 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
-# test/models/guestlist_test.rb
 require "test_helper"
 
 class GuestListTest < ActiveSupport::TestCase

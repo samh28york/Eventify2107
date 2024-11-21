@@ -1,22 +1,19 @@
 Rails.application.routes.draw do
   get "guest_lists/index"
-  get "home/index"
-  root "home#index"
+  root "home#user_home"
 
-  get "login/guest", to: "sessions#new_guest", as: "new_guest_session"
-  get "login/organizer", to: "sessions#new_organizer", as: "new_organizer_session"
+  get "home/user_home"
 
-  post "guest_sessions", to: "sessions#create_guest"
-  post "organizer_sessions", to: "sessions#create_organizer"
+  get "login", to: "sessions#new_user", as: "new_user_session"
+  post "login", to: "sessions#create_user", as: "user_sessions"
+  delete "logout", to: "sessions#destroy_user", as: "logout"
 
-  get "register/guest", to: "registrations#new_guest", as: "new_guest_registration"
-  get "register/organizer", to: "registrations#new_organizer", as: "new_organizer_registration"
+  get "register/user", to: "registrations#new_user", as: "new_user_registration"
+  post "user_registrations", to: "registrations#create_user", as: "user_registrations"
 
-  post "guest_registrations", to: "registrations#create_guest"
-  post "organizer_registrations", to: "registrations#create_organizer"
+  get "user_home", to: "home#user_home", as: "user_home"
 
-  get "guest_home", to: "home#guest_home", as: "guest_home"
-  get "organizer_home", to: "home#organizer_home", as: "organizer_home"
+
 
   resources :events do
     member do

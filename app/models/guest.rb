@@ -15,11 +15,14 @@
 #
 class Guest < ApplicationRecord
     has_secure_password
-    has_many :guest_lists, dependent: :destroy
-    has_many :events, through: :guest_lists
 
-    has_and_belongs_to_many :events
+    belongs_to :guest_list
+    belongs_to :events, through: :guest_lists
+    belongs_to :user
 
     validates :email, presence: true, uniqueness: true
     validates :password, presence: true, length: { minimum: 6 }
+
+    enum role: { guest: "guest", admin: "admin" }
+    enum rsvp_status: { pending: "pending", accepted: "accepted", declined: "declined" }
 end

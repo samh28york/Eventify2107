@@ -1,31 +1,21 @@
 class SessionsController < ApplicationController
-    def new_guest
-      # Render guest login form
+    def new_user
+      # Render user login form
     end
 
-    def new_organizer
-      # Render organizer login form
-    end
-
-    def create_guest
-      guest = Guest.find_by(email: params[:email])
-      if guest&.authenticate(params[:password])
-        session[:guest_id] = guest.id
-        redirect_to guest_home_path, notice: "Logged in successfully."
+    def create_user
+      user = User.find_by(email: params[:email])
+      if user&.authenticate(params[:password])
+        session[:user_id] = user.id
+        redirect_to user_home_path, notice: "Logged in successfully."
       else
         flash.now[:alert] = "Invalid email or password"
-        render :new_guest
+        render :new_user
       end
     end
 
-    def create_organizer
-      organizer = Organizer.find_by(email: params[:email])
-      if organizer&.authenticate(params[:password])
-        session[:organizer_id] = organizer.id
-        redirect_to events_path, notice: "Logged in successfully."
-      else
-        flash.now[:alert] = "Invalid email or password"
-        render :new_organizer
-      end
+    def destroy_user
+      session[:user_id] = nil
+      redirect_to user_sessions_path, notice: "Logged out successfully!"
     end
 end
