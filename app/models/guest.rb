@@ -2,22 +2,19 @@
 #
 # Table name: guests
 #
-#  id              :integer          not null, primary key
-#  email           :string           not null
-#  first_name      :string
-#  last_name       :string
-#  party_size      :integer
-#  password_digest :string           default(""), not null
-#  phone           :string
-#  event_id        :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id          :integer          not null, primary key
+#  role        :string           default("guest")
+#  rsvp_status :string           default("pending")
+#  party_size  :integer
+#  event_id    :integer
+#  user_id     :integer
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #
 class Guest < ApplicationRecord
     has_secure_password
 
-    belongs_to :guest_list
-    belongs_to :events, through: :guest_lists
+    belongs_to :events
     belongs_to :user
 
     validates :email, presence: true, uniqueness: true
