@@ -35,22 +35,9 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     assert_empty assigns(:events)
   end
 
-  # Test for organizer home page
-  test "should get organizer_home" do
-    organizer = Organizer.create(email: "organizer@example.com", password: "password123", password_confirmation: "password123")
-
-    # Simulate the organizer login
-    sign_in organizer
-
-    get organizer_home_url
-
-    assert_response :success
-    # Additional assertions for the organizer home page can go here
-  end
-
   private
 
-  # Helper method for simulating user sign-in (for guest or organizer)
+  # Helper method for simulating user sign-in
   def sign_in(user)
     post session_url, params: { email: user.email, password: user.password }
   end

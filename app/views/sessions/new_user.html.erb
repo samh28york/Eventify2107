@@ -1,5 +1,5 @@
-<h1>Login as Guest</h1>
-<%= form_with url: guest_sessions_path, local: true do |form| %>
+<h1>Login</h1>
+<%= form_with url: user_sessions_path, local: true do |form| %>
   <%= form.label :email %>
   <%= form.email_field :email %>
   <%= form.label :password %>
@@ -7,5 +7,5 @@
   <%= form.submit "Login" %>
 <% end %>
 <p>
-  <a href="<%= new_guest_registration_path %>">Create a new guest account</a>
+  <a href="<%= new_user_registration_path %>">Create a new account</a>
 </p>

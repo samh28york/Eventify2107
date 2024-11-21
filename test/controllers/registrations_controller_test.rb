@@ -6,11 +6,6 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new_organizer" do
-    get new_organizer_url
-    assert_response :success
-  end
-
   test "should create guest and redirect to guest home" do
     # Use inline data to create a guest
     guest_params = { email: "guest@example.com", password: "password123", password_confirmation: "password123" }
@@ -32,28 +27,5 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
       post create_guest_url, params: { guest: guest_params }
     end
     assert_template :new_guest
-  end
-
-  test "should create organizer and redirect to organizer home" do
-    # Use inline data to create an organizer
-    organizer_params = { email: "organizer@example.com", password: "password123", password_confirmation: "password123" }
-
-    assert_difference("Organizer.count", 1) do
-      post create_organizer_url, params: { organizer: organizer_params }
-    end
-    organizer = Organizer.last
-    assert_redirected_to organizer_home_path
-    assert_equal "Organizer account created successfully.", flash[:notice]
-    assert_equal organizer.id, session[:organizer_id]
-  end
-
-  test "should not create organizer and render new_organizer if invalid" do
-    # Invalid data with missing email
-    organizer_params = { email: "", password: "password123", password_confirmation: "password123" }
-
-    assert_no_difference("Organizer.count") do
-      post create_organizer_url, params: { organizer: organizer_params }
-    end
-    assert_template :new_organizer
   end
 end

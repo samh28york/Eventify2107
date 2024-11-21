@@ -10,6 +10,6 @@
 #  updated_at  :datetime         not null
 #
 class GuestList < ApplicationRecord
-    belongs_to :guests, dependent: :destroy
+    has_many :guests, dependent: :destroy
     belongs_to :event
 end

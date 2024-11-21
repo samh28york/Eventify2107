@@ -1,12 +1,11 @@
 class HomeController < ApplicationController
-    def index
-    end
+  before_action :authenticate_user!, only: [:index]
 
-    def guest_home
-      @events = Event.joins(:guest_list).where(guest_lists: { guest_id: current_user.id })
-    end
+  def index
+  end
 
-    def organizer_home
-      # Logic for organizer home page
-    end
+  def user_home
+    render layout: false
+    @events = Event.joins(:guest_lists).where(guest_lists: { user_id: current_user.id })
+  end
 end
