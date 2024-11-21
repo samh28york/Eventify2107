@@ -15,8 +15,8 @@
 #
 class Guest < ApplicationRecord
     has_secure_password
-    
-    belongs_to :guest_list 
+
+    belongs_to :guest_list
     belongs_to :events, through: :guest_lists
     belongs_to :user
 
@@ -24,5 +24,5 @@ class Guest < ApplicationRecord
     validates :password, presence: true, length: { minimum: 6 }
 
     enum role: { guest: "guest", admin: "admin" }
-    enum rsvp_status: {pending: "pending", accepted: "accepted", declined: "declined"}
+    enum rsvp_status: { pending: "pending", accepted: "accepted", declined: "declined" }
 end
