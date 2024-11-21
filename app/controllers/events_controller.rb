@@ -11,7 +11,6 @@ class EventsController < ApplicationController
 
   def new
       @event = Event.new
-      @guestlist = @event.guest_list
       @guests = @event.guests
   end
 
