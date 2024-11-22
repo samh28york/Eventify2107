@@ -8,10 +8,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-require "test_helper"
-
-class GuestListTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+class GuestList < ApplicationRecord
+    belongs_to :event
+    has_many :guests, dependent: :destroy
 end
