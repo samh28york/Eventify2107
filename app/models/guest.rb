@@ -12,13 +12,8 @@
 #  updated_at  :datetime         not null
 #
 class Guest < ApplicationRecord
-    has_secure_password
-
-    belongs_to :events
+    belongs_to :event
     belongs_to :user
-
-    validates :email, presence: true, uniqueness: true
-    validates :password, presence: true, length: { minimum: 6 }
 
     enum role: { guest: "guest", admin: "admin" }
     enum rsvp_status: { pending: "pending", accepted: "accepted", declined: "declined" }

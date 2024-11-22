@@ -13,6 +13,6 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
-    redirect_to new_user_session_path, alert: "You need to log in to continue." unless current_user
+    redirect_to new_session_path, alert: "You need to log in to continue." unless current_user
   end
 end
