@@ -2,12 +2,11 @@
 #
 # Table name: guest_lists
 #
-#  id          :integer          not null, primary key
-#  rsvp_status :string
-#  event_id    :integer          not null
-#  guest_id    :integer          not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id         :integer          not null, primary key
+#  event_id   :integer          not null
+#  guest_id   :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 # This model initially had no columns defined. If you add columns to the
