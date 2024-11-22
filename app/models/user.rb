@@ -14,9 +14,9 @@
 class User < ApplicationRecord
     has_secure_password
 
-    has_many :guests
-    has_many :events_as_admin, -> { where(guest_lists: { role: "admin" }) }, through: :guest_lists, source: :event
-    has_many :events_as_guest, -> { where(guest_lists: { role: "guest" }) }, through: :guest_lists, source: :event
+    has_many :guests, dependent: :destroy
+    has_many :events_as_admin, -> { where(guests: { role: "admin" }) }, through: :guests, source: :event
+    has_many :events_as_guest, -> { where(guests: { role: "guest" }) }, through: :guests, source: :event
 
     has_many :created_events, class_name: "Event", foreign_key: "creator_id", dependent: :destroy
 
