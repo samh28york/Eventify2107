@@ -5,22 +5,49 @@ class GuestsController < ApplicationController
       @events = Event.joins(:GuestList).where(guest_lists: { guest_id: current_user.id })
     end
 
-    def update_attendance
-      guest_list = GuestList.find_by(guest_id: current_user.id, event_id: params[:event_id])
-      if guest_list && guest_list.update(rsvp_status: params[:rsvp_status])
-        redirect_to guest_home_path, notice: "Attendance updated successfully."
+    def create
+      @user = User.find_or_create_by(email: params[:email]) do |user|
+        user.first_name = params[:first_name]
+        user.last_name = params[:last_name]
+        user.password = SecureRandom.hex(8)
+      end
+  
+      guest = @event.guests.build(user: @user, role: params[:role] || "guest")
+  
+      if guest.save
+        redirect_to @event, notice: "Guest successfully created."
       else
-        redirect_to guest_home_path, alert: "Failed to update attendance."
+        redirect_to @event, alert: "Failed to create guest: #{guest.errors.full_messages.join(', ')}"
+      end
+    end
+
+    def update
+      guest = @event.guests.find(params[:id])
+  
+      if guest.update(guest_params)
+        redirect_to @event, notice: "Guest information updated successfully."
+      else
+        redirect_to @event, alert: "Failed to update guest information: #{guest.errors.full_messages.join(', ')}"
       end
     end
 
     def destroy
-      guest_list = GuestList.find_by(guest_id: params[:id], event_id: params[:event_id])
-      if guest_list
-        guest_list.destroy
-        redirect_to guests_path, notice: "Event removed from your dashboard."
+      guest = @event.guests.find(params[:id])
+  
+      if guest.destroy
+        redirect_to @event, notice: "Guest removed successfully."
       else
-        redirect_to guests_path, alert: "Failed to remove event."
+        redirect_to @event, alert: "Failed to remove guest."
       end
+    end
+
+    private
+
+    def set_event
+      @event = Event.find(params[:event_id])
+    end
+
+    def guest_params
+      params.require(:guest).permit(:role, :rsvp_status, :party_size)
     end
 end
