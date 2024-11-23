@@ -14,19 +14,33 @@ class EventsController < ApplicationController
       @guests = @event.guests
   end
 
+  # def create
+  #     @event = Event.create(event_params)
+
+  #     if @event.persisted?
+  #       Rails.logger.info "Event created successfully! ID: #{@event.id}"
+  #       redirect_to @event, notice: "Event was successfully created"
+  #     else
+  #       Rails.logger.error "Failed to create event. Errors: #{@event.errors.full_messages.join(", ")}"
+
+  #       flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(", ")}"
+  #       render :new
+  #     end
+  # end
+
   def create
-      @event = Event.create(event_params)
-
-      if @event.persisted?
-        Rails.logger.info "Event created successfully! ID: #{@event.id}"
-        redirect_to @event, notice: "Event was successfully created"
-      else
-        Rails.logger.error "Failed to create event. Errors: #{@event.errors.full_messages.join(", ")}"
-
-        flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(", ")}"
-        render :new
-      end
+    @event = current_user.created_events.build(event_params)
+  
+    if @event.save
+      # Automatically make the creator an admin guest for this event
+      @event.guests.create!(user: current_user, role: "admin", rsvp_status: "accepted")
+      redirect_to @event, notice: "Event was successfully created."
+    else
+      flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(', ')}"
+      render :new
     end
+  end
+  
 
   def edit
       @event
@@ -48,14 +62,31 @@ class EventsController < ApplicationController
   end
 
 
-  def add_guest
-    @guest = Guest.find_or_create_by(guest_params)  # Finds or creates a guest based on the params
+  # def add_guest
+  #   @guest = Guest.find_or_create_by(guest_params)  # Finds or creates a guest based on the params
 
-    if @guest.persisted?
-      @event.guests << @guest unless @event.guests.include?(@guest)  # Adds guest to the event if not already added
-      redirect_to @event, notice: "Guest was successfully added to the event."
+  #   if @guest.persisted?
+  #     @event.guests << @guest unless @event.guests.include?(@guest)  # Adds guest to the event if not already added
+  #     redirect_to @event, notice: "Guest was successfully added to the event."
+  #   else
+  #     redirect_to @event, alert: "Failed to add guest to the event: " + @guest.errors.full_messages.join(", ")
+  #   end
+  # end
+
+  def add_guest
+    @event = Event.find(params[:id])
+    @user = User.find_or_create_by(email: params[:email]) do |user|
+      user.first_name = params[:first_name]
+      user.last_name = params[:last_name]
+      user.password = SecureRandom.hex(8) # Generates a random password
+    end
+  
+    guest = @event.guests.build(user: @user, role: "guest")
+  
+    if guest.save
+      redirect_to @event, notice: "Guest successfully added."
     else
-      redirect_to @event, alert: "Failed to add guest to the event: " + @guest.errors.full_messages.join(", ")
+      redirect_to @event, alert: "Failed to add guest: #{guest.errors.full_messages.join(', ')}"
     end
   end
 
