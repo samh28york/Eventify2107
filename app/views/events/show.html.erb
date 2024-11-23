@@ -14,10 +14,19 @@
   <%= form.submit 'Delete', class: 'btn btn-danger' %>
 <% end %>
 
-<!-- app/views/events/show.html.erb -->
+<This adds a a form for the events show page to invite the guest--> 
 <h1><%= @event.title %></h1>
 <p><%= @event.description %></p>
 
-<div id="guest-list">
-  <%= render 'guestlists/guest_list', locals: { guests: @event.guests, event: @event } %>
-</div>
+<%= form_with url: add_guest_to_event_path(@event), method: :post do |f| %>
+  <%= f.label :email, "Guest Email" %>
+  <%= f.text_field :email %>
+
+  <%= f.label :first_name, "Guest First Name" %>
+  <%= f.text_field :first_name %>
+
+  <%= f.label :last_name, "Guest Last Name" %>
+  <%= f.text_field :last_name %>
+
+  <%= f.submit "Add Guest" %>
+<% end %>
