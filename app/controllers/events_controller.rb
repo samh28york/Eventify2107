@@ -1,57 +1,52 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [ :show, :edit, :update, :destroy ]
+  before_action :authenticate_user!
+  before_action :set_event, only: [:show, :edit, :update, :destroy]
 
   def index
-      @events = Event.all
+    @events = Event.all
   end
 
   def show
-      @event = Event.find(params[:id])
+    @event = Event.find(params[:id])
   end
 
   def new
-      @event = Event.new
-      @guests = @event.guests
+    @event = Event.new
+    @guests = @event.guests
   end
 
-  # def create
-  #     @event = Event.create(event_params)
-
-  #     if @event.persisted?
-  #       Rails.logger.info "Event created successfully! ID: #{@event.id}"
-  #       redirect_to @event, notice: "Event was successfully created"
-  #     else
-  #       Rails.logger.error "Failed to create event. Errors: #{@event.errors.full_messages.join(", ")}"
-
-  #       flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(", ")}"
-  #       render :new
-  #     end
-  # end
-
   def create
-    @event = current_user.created_events.build(event_params)
-  
+    @event = Event.new(event_params)
+    @event.user = current_user
+
+    
+    @event.start_time = combine_date_and_time(@event.start_date, params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period])
+    @event.end_time = combine_date_and_time(@event.end_date, params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period])
+
     if @event.save
-      # Automatically make the creator an admin guest for this event
-      @event.guests.create!(user: current_user, role: "admin", rsvp_status: "accepted")
+      Rails.logger.info "Event created successfully! ID: #{@event.id}"
       redirect_to @event, notice: "Event was successfully created."
     else
-      flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(', ')}"
+      Rails.logger.error "Failed to create event. Errors: #{@event.errors.full_messages.join(", ")}"
+      flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(", ")}"
       render :new
     end
   end
-  
+
 
   def edit
-      @event
+    @event
   end
 
   def update
-      if @event.update(event_params)
-          redirect_to @event, notice: "Event was successfully updated."
-      else
-          render :edit
-      end
+    @event.start_time = combine_date_and_time(@event.start_date, params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period])
+    @event.end_time = combine_date_and_time(@event.end_date, params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period])
+
+    if @event.update(event_params)
+      redirect_to @event, notice: "Event was successfully updated."
+    else
+      render :edit
+    end
   end
 
   def destroy
@@ -60,18 +55,6 @@ class EventsController < ApplicationController
   rescue ActiveRecord::RecordNotDestroyed => e
     redirect_to events_path, alert: "Event could not be deleted: " + e.message
   end
-
-
-  # def add_guest
-  #   @guest = Guest.find_or_create_by(guest_params)  # Finds or creates a guest based on the params
-
-  #   if @guest.persisted?
-  #     @event.guests << @guest unless @event.guests.include?(@guest)  # Adds guest to the event if not already added
-  #     redirect_to @event, notice: "Guest was successfully added to the event."
-  #   else
-  #     redirect_to @event, alert: "Failed to add guest to the event: " + @guest.errors.full_messages.join(", ")
-  #   end
-  # end
 
   def add_guest
     @event = Event.find(params[:id])
@@ -93,10 +76,15 @@ class EventsController < ApplicationController
   private
 
   def set_event
-      @event = Event.find(params[:id])
+    @event = Event.find(params[:id])
   end
 
   def event_params
-      params.require(:event).permit(:title, :date, :start_time, :end_time, :location, :description)
+    params.require(:event).permit(:title, :start_date, :end_date, :location, :description)
+  end
+
+  def combine_date_and_time(date, hour, minute, period)
+    time_string = "#{date} #{hour}:#{minute} #{period}"
+    Time.zone.parse(time_string)
   end
 end

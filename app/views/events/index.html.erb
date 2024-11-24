@@ -20,7 +20,8 @@
     <% @events.each do |event| %>
       <tr>
         <td style="padding: 10px;"><%= event.title %></td>
-        <td style="padding: 10px;"><%= event.date.strftime("%B %d, %Y") if event.date %></td>
+        <td style="padding: 10px;"><%= event.start_date.strftime("%B %d, %Y") if event.start_date %></td>
+        <td style="padding: 10px;"><%= event.end_date.strftime("%B %d, %Y") if event.end_date %></td>
         <td style="padding: 10px;"><%= event.start_time.strftime("%I:%M %p") if event.start_time %></td>
         <td style="padding: 10px;"><%= event.end_time.strftime("%I:%M %p") if event.end_time %></td>
         <td style="padding: 10px;"><%= event.location %></td>
