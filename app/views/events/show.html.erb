@@ -1,24 +1,53 @@
-<h1><%= @event.title %></h1>
+<h1 class="text-center mb-4"><%= @event.title %></h1>
 
-<p><strong>Date:</strong> <%= @event.start_date.strftime("%B %d, %Y") if @event.start_date %></p>
-<p><strong>Date:</strong> <%= @event.end_date.strftime("%B %d, %Y") if @event.end_date %></p>
-<p><strong>Start Time:</strong> <%= @event.start_time.strftime("%I:%M %p") if @event.start_time %></p>
-<p><strong>End Time:</strong> <%= @event.end_time.strftime("%I:%M %p") if @event.end_time %></p>
-<p><strong>Location:</strong> <%= @event.location %></p>
-<p><strong>Description:</strong> <%= @event.description %></p>
+<div class="container d-flex justify-content-center align-items-start" style="min-height: 70vh; padding-top: 10px; padding-bottom: 30px;">
+  <div class="row w-100">
+    <!-- Left Card (Event Info) -->
+    <div class="col-md-6 mb-4">
+      <div class="card p-4" style="height: auto;">
+        <h3 class="text-center mb-4">Event Information</h3>
+        
+        <!-- Event Date & Time Information -->
+        <div class="mb-3">
+          <p><strong>Date:</strong> <%= @event.start_date.strftime("%B %d, %Y") if @event.start_date %></p>
+        </div>
+        <div class="mb-3">
+          <p><strong>End Date:</strong> <%= @event.end_date.strftime("%B %d, %Y") if @event.end_date %></p>
+        </div>
+        <div class="mb-3">
+          <p><strong>Start Time:</strong> <%= @event.start_time.strftime("%I:%M %p") if @event.start_time %></p>
+        </div>
+        <div class="mb-3">
+          <p><strong>End Time:</strong> <%= @event.end_time.strftime("%I:%M %p") if @event.end_time %></p>
+        </div>
+        <div class="mb-3">
+          <p><strong>Location:</strong> <%= @event.location %></p>
+        </div>
+        <div class="mb-3">
+          <p><strong>Description:</strong> <%= @event.description %></p>
+        </div>
 
-<%= link_to 'Edit', edit_event_path(@event), class: 'btn btn-primary' %> | 
-<%= link_to 'Back to Events', events_path, class: 'btn btn-secondary' %> |
+        <!-- Action Buttons (Edit, Back to Events, Delete) -->
+        <div class="d-flex gap-3 justify-content-start mt-4">
+          <%= link_to 'Edit', edit_event_path(@event), class: 'btn btn-primary' %>
+          <%= link_to 'Back to Events', events_path, class: 'btn btn-secondary' %>
+          <%= form_with(model: @event, method: :delete, data: { confirm: 'Are you sure you want to delete this event?' }) do |form| %>
+            <%= form.submit 'Delete', class: 'btn btn-danger' %>
+          <% end %>
+        </div>
 
-<!-- Delete Form (no JavaScript required) -->
-<%= form_with(model: @event, method: :delete, data: { confirm: 'Are you sure you want to delete this event?' }) do |form| %>
-  <%= form.submit 'Delete', class: 'btn btn-danger' %>
-<% end %>
+      </div>
+    </div>
 
-<!-- app/views/events/show.html.erb -->
-<h1><%= @event.title %></h1>
-<p><%= @event.description %></p>
-
-<div id="guest-list">
-  <%= render 'guestlists/guest_list', locals: { guests: @event.guests, event: @event } %>
+    <!-- Right Card (Guest List) -->
+    <div class="col-md-6 mb-4">
+      <div class="card p-4" style="height: auto;">
+        <h3 class="text-center mb-4">Guest List</h3>
+        <!-- Render the guest list -->
+        <div id="guest-list">
+          <%= render 'guestlists/guest_list', locals: { guests: @event.guests, event: @event } %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
