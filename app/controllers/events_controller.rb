@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_event, only: [ :show, :edit, :update, :destroy ]
 
   def index
@@ -15,18 +16,19 @@ class EventsController < ApplicationController
   end
 
   def create
-      @event = Event.create(event_params)
+    @event = Event.new(event_params)
+    @event.user = current_user
 
-      if @event.persisted?
-        Rails.logger.info "Event created successfully! ID: #{@event.id}"
-        redirect_to @event, notice: "Event was successfully created"
-      else
-        Rails.logger.error "Failed to create event. Errors: #{@event.errors.full_messages.join(", ")}"
+    if @event.save
+      Rails.logger.info "Event created successfully! ID: #{@event.id}"
+      redirect_to @event, notice: "Event was successfully created"
+    else
+      Rails.logger.error "Failed to create event. Errors: #{@event.errors.full_messages.join(", ")}"
 
-        flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(", ")}"
-        render :new
-      end
+      flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(", ")}"
+      render :new
     end
+  end
 
   def edit
       @event
@@ -66,6 +68,6 @@ class EventsController < ApplicationController
   end
 
   def event_params
-      params.require(:event).permit(:title, :date, :start_time, :end_time, :location, :description)
+      params.require(:event).permit(:title, :start_date, :end_date, :start_time, :end_time, :location, :description)
   end
 end
