@@ -4,6 +4,5 @@ class HomeController < ApplicationController
   def index
     @organized_events = Event.where(user_id: current_user.id)
     @guest_events = Event.joins(:guests).where("guests.user_id = ? AND events.user_id != ?", current_user.id, current_user.id).distinct
-    
   end
 end
