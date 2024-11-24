@@ -1,25 +1,58 @@
-<h1>Create an Account</h1>
-<%= form_with model: @user, url: user_registrations_path, local: true do |form| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-      <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<h1 class="text-center mb-4">Create an Account</h1>
 
-  <%= form.label :first_name %>
-  <%= form.text_field :first_name %>
-  <%= form.label :last_name %>
-  <%= form.text_field :last_name %>
-  <%= form.label :email %>
-  <%= form.email_field :email %>
-  <%= form.label :password %>
-  <%= form.password_field :password %>
-  <%= form.label :password_confirmation %>
-  <%= form.password_field :password_confirmation %>
-  <%= form.submit "Create Account" %>
-<% end %>
+<div class="d-flex justify-content-center align-items-start" style="min-height: 70vh;">
+  <div class="card p-4" style="width: 400px; height: auto; display: flex; flex-direction: column; justify-content: center;">
+
+    <%= form_with model: @user, url: user_registrations_path, local: true do |form| %>
+
+      <!-- Error Display -->
+      <% if @user.errors.any? %>
+        <div id="error_explanation" class="alert alert-danger">
+          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+          <ul>
+            <% @user.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <!-- First Name Field -->
+      <div class="mb-3">
+        <%= form.label :first_name, class: 'form-label' %>
+        <%= form.text_field :first_name, class: 'form-control' %>
+      </div>
+
+      <!-- Last Name Field -->
+      <div class="mb-3">
+        <%= form.label :last_name, class: 'form-label' %>
+        <%= form.text_field :last_name, class: 'form-control' %>
+      </div>
+
+      <!-- Email Field -->
+      <div class="mb-3">
+        <%= form.label :email, class: 'form-label' %>
+        <%= form.email_field :email, class: 'form-control' %>
+      </div>
+
+      <!-- Password Field -->
+      <div class="mb-3">
+        <%= form.label :password, class: 'form-label' %>
+        <%= form.password_field :password, class: 'form-control' %>
+      </div>
+
+      <!-- Password Confirmation Field -->
+      <div class="mb-3">
+        <%= form.label :password_confirmation, class: 'form-label' %>
+        <%= form.password_field :password_confirmation, class: 'form-control' %>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="d-flex justify-content-center mt-3">
+        <%= form.submit "Create Account", class: 'btn btn-primary w-100' %>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>
