@@ -7,15 +7,33 @@
   <div class="alert alert-danger"><%= flash[:alert] %></div>
 <% end %>
 
-<%  if @events && @events.any? %>
-  <h2>Here are your events:</h2>
+<%  if @organized_events && @organized_events.any? %>
+  <h2>Here are the events you organized:</h2>
   <ul>
-    <% @events.each do |event| %>
+    <% @organized_events.each do |event| %>
       <li>
         <h3><%= event.title %></h3>
         <p><strong>Location:</strong> <%= event.location %></p>
         <p><strong>Description:</strong> <%= event.description %></p>
-        <p><strong>Date:</strong> <%= event.date %></p>
+        <p><strong>Start Date:</strong> <%= event.start_date %></p>
+        <p><strong>End Date:</strong> <%= event.start_date %></p>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You currently have no events that you created.</p>
+<% end %>
+
+<%  if @guest_events && @guest_events.any? %>
+  <h2>Here are the events you are invited to:</h2>
+  <ul>
+    <% @guest_events.each do |event| %>
+      <li>
+        <h3><%= event.title %></h3>
+        <p><strong>Location:</strong> <%= event.location %></p>
+        <p><strong>Description:</strong> <%= event.description %></p>
+        <p><strong>Start Date:</strong> <%= event.start_date %></p>
+        <p><strong>End Date:</strong> <%= event.start_date %></p>
         <% guest_list_entry = GuestList.find_by(guest_id: current_user.id, event_id: event.id) %>
         <%= form_with url: update_attendance_guests_path, method: :patch, local: true do |form| %>
           <%= form.hidden_field :event_id, value: event.id %>
@@ -29,5 +47,5 @@
     <% end %>
   </ul>
 <% else %>
-  <p>You currently have no events.</p>
+  <p>You currently have no event.</p>
 <% end %>

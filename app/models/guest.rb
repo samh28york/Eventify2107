@@ -15,6 +15,6 @@ class Guest < ApplicationRecord
     belongs_to :event
     belongs_to :user
 
-    enum role: { guest: "guest", admin: "admin" }
-    enum rsvp_status: { pending: "pending", accepted: "accepted", declined: "declined" }
+    enum role: [:guest, :admin]
+    enum rsvp_status: [:pending, :accepted, :declined]
 end

@@ -16,7 +16,7 @@
 #
 class Event < ApplicationRecord
   has_many :guests, dependent: :destroy
-  belongs_to :creator, class_name: "User", foreign_key: "creator_id"
+  belongs_to :user
 
   validates :title, presence: true
   validates :start_time, presence: true
