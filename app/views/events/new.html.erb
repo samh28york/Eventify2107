@@ -66,6 +66,10 @@
         <%= form.text_field :location, id: :event_location, class: 'form-control' %>
       </div>
 
+<!-- app/views/events/show.html.erb -->
+<h1><%= @event.title %></h1>
+<p><%= @event.description %></p>
+
       <div class="mb-3">
         <%= form.label :description, class: 'form-label' %>
         <%= form.text_area :description, id: :event_description, class: 'form-control', rows: 2 %>
@@ -78,3 +82,4 @@
     <% end %>
   </div>
 </div>
+

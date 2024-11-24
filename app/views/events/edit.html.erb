@@ -81,6 +81,10 @@
             <%= form.text_area :description, id: :event_description, class: 'form-control', rows: 2 %>
           </div>
 
+<!-- app/views/events/show.html.erb -->
+<h1><%= @event.title %></h1>
+<p><%= @event.description %></p>
+
           <!-- Submit Buttons -->
           <div class="d-flex justify-content-start gap-3 mt-4">
             <%= form.submit "Update Event", class: 'btn btn-primary' %>
@@ -90,16 +94,7 @@
       </div>
     </div>
 
-    <!-- Right Card (Guest List) -->
-    <div class="col-md-6 mb-4">
-      <div class="card p-4" style="height: auto;">
-        <h3 class="text-center mb-4">Guest List</h3>
-
-        <!-- Render the guest list -->
-        <div id="guest-list">
-          <%= render 'guestlists/guest_list', locals: { guests: @event.guests, event: @event } %>
-        </div>
-      </div>
     </div>
   </div>
 </div>
+

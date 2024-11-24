@@ -33,6 +33,7 @@ class EventsController < ApplicationController
     end
   end
 
+
   def edit
     @event
   end
@@ -53,6 +54,23 @@ class EventsController < ApplicationController
     redirect_to events_path, notice: "Event was successfully deleted."
   rescue ActiveRecord::RecordNotDestroyed => e
     redirect_to events_path, alert: "Event could not be deleted: " + e.message
+  end
+
+  def add_guest
+    @event = Event.find(params[:id])
+    @user = User.find_or_create_by(email: params[:email]) do |user|
+      user.first_name = params[:first_name]
+      user.last_name = params[:last_name]
+      user.password = SecureRandom.hex(8) # Generates a random password
+    end
+  
+    guest = @event.guests.build(user: @user, role: "guest")
+  
+    if guest.save
+      redirect_to @event, notice: "Guest successfully added."
+    else
+      redirect_to @event, alert: "Failed to add guest: #{guest.errors.full_messages.join(', ')}"
+    end
   end
 
   private
