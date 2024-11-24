@@ -7,24 +7,39 @@
   <div class="alert alert-danger"><%= flash[:alert] %></div>
 <% end %>
 
-<% if @events && @events.any? %>
-  <h2>Here are your events:</h2>
-  <ul>
-    <% @events.each do |event| %>
-      <li>
-        <!-- Change 1: Added link_to helper to make the event title clickable -->
-        <h3><%= link_to event.title, event_path(event) %></h3>
 
+<%  if @organized_events && @organized_events.any? %>
+  <h2>Here are the events you organized:</h2>
+  <ul>
+    <% @organized_events.each do |event| %>
+      <li>
         <p><strong>Location:</strong> <%= event.location %></p>
         <p><strong>Description:</strong> <%= event.description %></p>
-        
-        <!-- Change 2: Updated to format start_date and end_date -->
-        <p><strong>Date:</strong> <%= event.start_date.strftime('%b %d, %Y') %> to <%= event.end_date.strftime('%b %d, %Y') %></p>
+        <p><strong>Start Date:</strong> <%= event.start_date.strftime("%B %d, %Y") %></p>
+        <p><strong>Start Time:</strong> <%= event.start_time.strftime("%I:%M %p") %></p>
+        <p><strong>End Date:</strong> <%= event.end_date.strftime("%B %d, %Y") %></p>
+        <p><strong>End Time:</strong> <%= event.end_time.strftime("%I:%M %p") %></p>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You currently have no events that you created.</p>
+<% end %>
 
-        <!-- Change 3: Removed GuestList reference and replaced it with direct query on guests -->
-        <% guest_entry = event.guests.find_by(user: current_user) %>
-        
-        <!-- Change 4: Updated RSVP form to reflect direct Guest model usage -->
+<%  if @guest_events && @guest_events.any? %>
+  <h2>Here are the events you are invited to:</h2>
+  <ul>
+    <% @guest_events.each do |event| %>
+      <li>
+        <h3><%= event.title %></h3>
+        <p><strong>Location:</strong> <%= event.location %></p>
+        <p><strong>Description:</strong> <%= event.description %></p>
+        <p><strong>Start Date:</strong> <%= event.start_date.strftime("%B %d, %Y") %></p>
+        <p><strong>Start Time:</strong> <%= event.start_time.strftime("%I:%M %p") %></p>
+        <p><strong>End Date:</strong> <%= event.end_date.strftime("%B %d, %Y") %></p>
+        <p><strong>End Time:</strong> <%= event.end_time.strftime("%I:%M %p") %></p>
+        <% guest_list_entry = GuestList.find_by(guest_id: current_user.id, event_id: event.id) %>
+
         <%= form_with url: update_attendance_guests_path, method: :patch, local: true do |form| %>
           <%= form.hidden_field :event_id, value: event.id %>
           <%= form.radio_button :rsvp_status, 'accepted', checked: guest_entry&.rsvp_status == 'accepted' %>
@@ -39,5 +54,5 @@
     <% end %>
   </ul>
 <% else %>
-  <p>You currently have no events.</p>
+  <p>You currently have no event.</p>
 <% end %>

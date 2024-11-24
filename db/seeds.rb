@@ -44,7 +44,7 @@ event1 = Event.create!(
   start_time: Time.now + 1.day + 2.hours,
   end_time: Time.now + 1.day + 5.hours,
   location: "Alice's House",
-  creator_id: alice.id,
+  user_id: alice.id,
   description: "A fun birthday party!"
 )
 
@@ -55,7 +55,7 @@ event2 = Event.create!(
   start_time: Time.now + 2.days + 1.hours,
   end_time: Time.now + 2.days + 4.hours,
   location: "Bob's Office",
-  creator_id: bob.id,
+  user_id: bob.id,
   description: "A networking event for professionals."
 )
 
@@ -103,7 +103,7 @@ Guest.create!(
   party_size: 1
 )
 Guest.create!(
-  user: dana,
+  user: alice,
   event: event2,
   role: "guest",
   rsvp_status: "declined",

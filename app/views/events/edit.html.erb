@@ -1,54 +1,100 @@
-<h1>Edit Event</h1>
+<h1 class="text-center mb-4">Edit Event</h1>
 
-<%= form_with model: @event, local: true do |form| %>
-  <% if @event.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
-      <ul>
-        <% @event.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<div class="container d-flex justify-content-center align-items-start" style="min-height: 70vh; padding-top: 10px; padding-bottom: 30px;">
+  <div class="row w-100">
+    <!-- Left Card (Edit Event Form) -->
+    <div class="col-md-6 mb-4">
+      <div class="card p-4" style="height: auto;">
+        <h3 class="text-center mb-4">Event Information</h3>
 
-  <div class="field">
-    <%= form.label :title %>
-    <%= form.text_field :title, id: :event_title %>
-  </div>
+        <%= form_with model: @event, local: true, html: { class: 'w-100' } do |form| %>
+          <% if @event.errors.any? %>
+            <div id="error_explanation" class="alert alert-danger">
+              <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+              <ul>
+                <% @event.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
 
-  <div class="field">
-    <%= form.label :date %>
-    <%= form.date_field :date, id: :event_date %>
-  </div>
+          <!-- Title -->
+          <div class="mb-3">
+            <%= form.label :title, class: 'form-label' %>
+            <%= form.text_field :title, id: :event_title, class: 'form-control' %>
+          </div>
 
-  <div class="field">
-    <%= form.label :start_time %>
-    <%= form.time_field :start_time, id: :event_start_time %>
-  </div>
+          <!-- Start Date -->
+          <div class="mb-3">
+            <%= form.label :start_date, class: 'form-label' %>
+            <%= form.date_field :start_date, id: :event_start_date, class: 'form-control' %>
+          </div>
 
-  <div class="field">
-    <%= form.label :end_time %>
-    <%= form.time_field :end_time, id: :event_end_time %>
-  </div>
+          <!-- End Date -->
+          <div class="mb-3">
+            <%= form.label :end_date, class: 'form-label' %>
+            <%= form.date_field :end_date, id: :event_end_date, class: 'form-control' %>
+          </div>
 
-  <div class="field">
-    <%= form.label :location %>
-    <%= form.text_field :location, id: :event_location %>
-  </div>
+          <!-- Start Time -->
+          <div class="mb-3">
+            <%= form.label :start_time, class: 'form-label' %>
+            <div class="row">
+              <div class="col">
+                <%= form.select :start_hour, (1..12).to_a, { selected: @event.start_time&.hour % 12 == 0 ? 12 : @event.start_time.hour % 12, prompt: 'Hour' }, class: 'form-control' %>
+              </div>
+              <div class="col">
+                <%= form.select :start_minute, ['00', '15', '30', '45'], { selected: @event.start_time&.min.to_s.rjust(2, '0'), prompt: 'Minute' }, class: 'form-control' %>
+              </div>
+              <div class="col">
+                <%= form.select :start_period, ['AM', 'PM'], { selected: @event.start_time&.hour >= 12 ? 'PM' : 'AM', prompt: 'AM/PM' }, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
 
-  <div class="field">
-    <%= form.label :description %>
-    <%= form.text_area :description, id: :event_description %>
-  </div>
+          <!-- End Time -->
+          <div class="mb-3">
+            <%= form.label :end_time, class: 'form-label' %>
+            <div class="row">
+              <div class="col">
+                <%= form.select :end_hour, (1..12).to_a, { selected: @event.end_time&.hour % 12 == 0 ? 12 : @event.end_time.hour % 12, prompt: 'Hour' }, class: 'form-control' %>
+              </div>
+              <div class="col">
+                <%= form.select :end_minute, ['00', '15', '30', '45'], { selected: @event.end_time&.min.to_s.rjust(2, '0'), prompt: 'Minute' }, class: 'form-control' %>
+              </div>
+              <div class="col">
+                <%= form.select :end_period, ['AM', 'PM'], { selected: @event.end_time&.hour >= 12 ? 'PM' : 'AM', prompt: 'AM/PM' }, class: 'form-control' %>
+              </div>
+            </div>
+          </div>
 
-  <div class="actions">
-    <%= form.submit "Update Event" %>
-  </div>
-<% end %>
+          <!-- Location -->
+          <div class="mb-3">
+            <%= form.label :location, class: 'form-label' %>
+            <%= form.text_field :location, id: :event_location, class: 'form-control' %>
+          </div>
 
-<%= link_to 'Back to Event', @event %>
+          <!-- Description -->
+          <div class="mb-3">
+            <%= form.label :description, class: 'form-label' %>
+            <%= form.text_area :description, id: :event_description, class: 'form-control', rows: 2 %>
+          </div>
 
 <!-- app/views/events/show.html.erb -->
 <h1><%= @event.title %></h1>
 <p><%= @event.description %></p>
+
+          <!-- Submit Buttons -->
+          <div class="d-flex justify-content-start gap-3 mt-4">
+            <%= form.submit "Update Event", class: 'btn btn-primary' %>
+            <%= link_to 'Back to Event', @event, class: 'btn btn-secondary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    </div>
+  </div>
+</div>
+
