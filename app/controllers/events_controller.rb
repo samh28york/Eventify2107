@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_event, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_event, only: [:show, :edit, :update, :destroy]
 
   def index
     @events = Event.all
@@ -19,9 +19,13 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.user = current_user
 
+    
+    @event.start_time = combine_date_and_time(@event.start_date, params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period])
+    @event.end_time = combine_date_and_time(@event.end_date, params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period])
+
     if @event.save
       Rails.logger.info "Event created successfully! ID: #{@event.id}"
-      redirect_to @event, notice: "Event was successfully created"
+      redirect_to @event, notice: "Event was successfully created."
     else
       Rails.logger.error "Failed to create event. Errors: #{@event.errors.full_messages.join(", ")}"
       flash.now[:alert] = "Failed to create event: #{@event.errors.full_messages.join(", ")}"
@@ -34,6 +38,9 @@ class EventsController < ApplicationController
   end
 
   def update
+    @event.start_time = combine_date_and_time(@event.start_date, params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period])
+    @event.end_time = combine_date_and_time(@event.end_date, params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period])
+
     if @event.update(event_params)
       redirect_to @event, notice: "Event was successfully updated."
     else
@@ -55,13 +62,11 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:title, :start_date, :end_date, :start_time, :end_time, :location, :description)
+    params.require(:event).permit(:title, :start_date, :end_date, :location, :description)
   end
 
-  def time_options
-    (0..47).map do |i|
-      time = (i * 30).minutes.from_now.beginning_of_day
-      [time.strftime("%I:%M %p"), time.strftime("%H:%M")]
-    end
+  def combine_date_and_time(date, hour, minute, period)
+    time_string = "#{date} #{hour}:#{minute} #{period}"
+    Time.zone.parse(time_string)
   end
 end
