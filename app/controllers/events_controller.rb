@@ -15,6 +15,7 @@ class EventsController < ApplicationController
     @guests = @event.guests
   end
 
+
   def create
     @event = Event.new(event_params)
     @event.user = current_user
@@ -24,6 +25,8 @@ class EventsController < ApplicationController
 
     if @event.save
       Rails.logger.info "Event created successfully! ID: #{@event.id}"
+      # Automatically make the creator an admin guest for this event
+      @event.guests.create!(user: current_user, role: "admin", rsvp_status: "accepted")
       redirect_to @event, notice: "Event was successfully created."
     else
       Rails.logger.error "Failed to create event. Errors: #{@event.errors.full_messages.join(", ")}"
@@ -31,6 +34,7 @@ class EventsController < ApplicationController
       render :new
     end
   end
+
 
   def edit
     @event
@@ -53,6 +57,7 @@ class EventsController < ApplicationController
   rescue ActiveRecord::RecordNotDestroyed => e
     redirect_to events_path, alert: "Event could not be deleted: " + e.message
   end
+
 
   def add_guest
     @event = Event.find(params[:id])
