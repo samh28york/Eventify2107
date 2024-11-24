@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_event, only: [:show, :edit, :update, :destroy]
+  before_action :set_event, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @events = Event.all
@@ -19,9 +19,8 @@ class EventsController < ApplicationController
     @event = Event.new(event_params)
     @event.user = current_user
 
-    
-    @event.start_time = combine_date_and_time(@event.start_date, params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period])
-    @event.end_time = combine_date_and_time(@event.end_date, params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period])
+    @event.start_time = parse_date_and_time(params[:event][:start_date], params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period])
+    @event.end_time = parse_date_and_time(params[:event][:end_date], params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period])
 
     if @event.save
       Rails.logger.info "Event created successfully! ID: #{@event.id}"
@@ -33,14 +32,13 @@ class EventsController < ApplicationController
     end
   end
 
-
   def edit
     @event
   end
 
   def update
-    @event.start_time = combine_date_and_time(@event.start_date, params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period])
-    @event.end_time = combine_date_and_time(@event.end_date, params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period])
+    @event.start_time = parse_date_and_time(params[:event][:start_date], params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period])
+    @event.end_time = parse_date_and_time(params[:event][:end_date], params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period])
 
     if @event.update(event_params)
       redirect_to @event, notice: "Event was successfully updated."
@@ -63,9 +61,9 @@ class EventsController < ApplicationController
       user.last_name = params[:last_name]
       user.password = SecureRandom.hex(8) # Generates a random password
     end
-  
+
     guest = @event.guests.build(user: @user, role: "guest")
-  
+
     if guest.save
       redirect_to @event, notice: "Guest successfully added."
     else
@@ -83,7 +81,7 @@ class EventsController < ApplicationController
     params.require(:event).permit(:title, :start_date, :end_date, :location, :description)
   end
 
-  def combine_date_and_time(date, hour, minute, period)
+  def parse_date_and_time(date, hour, minute, period)
     time_string = "#{date} #{hour}:#{minute} #{period}"
     Time.zone.parse(time_string)
   end
