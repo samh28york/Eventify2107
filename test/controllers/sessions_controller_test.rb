@@ -1,31 +1,36 @@
 require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
-  # Test for rendering guest login form
+  setup do
+    # Create a user with valid attributes
+    @user = User.create!(
+     first_name: "user",
+     last_name: "name",
+     email: "guest@example.com",
+     password: "password"
+   )
+  end
+
+  # Test for rendering user login form
   test "should get new_guest" do
-    get new_guest_url
+    get new_session_path
     assert_response :success
   end
 
-  # Test for successful guest login
+  # Test for successful user login
   test "should log in guest and redirect to guest home" do
-    # Create a guest instance with valid attributes
-    guest = Guest.create(email: "guest@example.com", password: "password123", password_confirmation: "password123")
-
-    post create_guest_url, params: { email: guest.email, password: "password123" }
-
-    assert_redirected_to guest_home_path
+    post user_sessions_path, params: { email: @user.email, password: @user.password }
+    
+    assert_redirected_to root_path
     assert_equal "Logged in successfully.", flash[:notice]
-    assert_equal guest.id, session[:guest_id]
+    assert_equal @user.id, session[:user_id]
   end
 
-  # Test for failed guest login
-  test "should not log in guest and render new_guest if invalid" do
-    guest = Guest.create(email: "guest@example.com", password: "password123", password_confirmation: "password123")
+  # Test for failed user login
+  test "should not log in user and render new_guest if invalid" do
+    post new_session_path, params: { email: @user.email, password: "wrongpassword" }
 
-    post create_guest_url, params: { email: guest.email, password: "wrongpassword" }
-
-    assert_template :new_guest
+    assert_template :new
     assert_equal "Invalid email or password", flash.now[:alert]
   end
 end

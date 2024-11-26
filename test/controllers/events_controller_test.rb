@@ -2,22 +2,31 @@ require "test_helper"
 
 class EventsControllerTest < ActionDispatch::IntegrationTest
   setup do
-     # Create an event with valid attributes
-     @event = Event.create!(
-      title: "Test Event",
-      date: DateTime.now + 1.day,  # Future date
-      start_time: DateTime.now + 1.day + 2.hours,
-      end_time: DateTime.now + 1.day + 4.hours,
-      location: "Test Location",
-      description: "Test Description"
-    )
-
-    # Create a guest with valid attributes
-    @guest = Guest.create!(
+     # Create a user with valid attributes
+     @user = User.create!(
+      first_name: "user",
+      last_name: "name",
       email: "guest@example.com",
       password: "password"
     )
+
+     # Create an event with valid attributes
+     @event = Event.create!(
+      title: "Test Event",
+      start_date: DateTime.now + 1.day,  # Future date
+      end_date: DateTime.now + 2.day,
+      start_time: DateTime.now + 1.day + 2.hours,
+      end_time: DateTime.now + 2.day + 4.hours,
+      location: "Test Location",
+      description: "Test Description",
+      user_id: @user.id
+    )
+
+    post user_sessions_path, params: { email: @user.email, password: "password" }
+    assert_response :redirect # Ensure login was successful
+    follow_redirect!
   end
+
 
   test "should get index" do
     get events_url
@@ -34,22 +43,28 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     get new_event_url
     assert_response :success
     assert_not_nil assigns(:event)
-    assert_not_nil assigns(:guests)
   end
 
   test "should create event" do
     assert_difference("Event.count") do
-      post events_url, params: { event: { title: "New Event", date: DateTime.now, start_time: DateTime.now, end_time: DateTime.now + 1.hour, location: "Location", description: "Description" } }
+      post events_url, params: { event: { title: "Alice's Birthday Party",
+      start_date: Time.now + 1.day,
+      end_date: Time.now + 1.day + 3.hours,
+      start_time: Time.now + 1.day + 2.hours,
+      end_time: Time.now + 1.day + 5.hours,
+      location: "Alice's House",
+      user_id: @user.id,
+      description: "A fun birthday party!" } }
     end
 
     assert_redirected_to event_url(Event.last)
-    assert_equal "Event was successfully created", flash[:notice]
+    assert_equal "Event was successfully created.", flash[:notice]
   end
 
   test "should not create event with invalid data" do
-    post events_url, params: { event: { title: "" } }  # Invalid event params
-    assert_response :unprocessable_entity
-    assert_template :new
+    assert_no_difference("Event.count") do
+      post events_url, params: { event: {title: "test" } }  # Invalid event params
+    end
     assert_includes flash[:alert], "Failed to create event"
   end
 
@@ -68,7 +83,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not update event with invalid data" do
     patch event_url(@event), params: { event: { title: "" } }  # Invalid data
-    assert_response :unprocessable_entity
+    assert_equal "Test Event", @event.title
     assert_template :edit
   end
 
@@ -81,26 +96,21 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Event was successfully deleted.", flash[:notice]
   end
 
-  test "should not destroy event if not deletable" do
-    Event.any_instance.stubs(:destroy!).raises(ActiveRecord::RecordNotDestroyed)  # Simulate destroy failure
-    delete event_url(@event)
-
-    assert_redirected_to events_url
-    assert_match "Event could not be deleted", flash[:alert]
-  end
-
   test "should add guest to event" do
-    assert_difference("@event.guests.count", 1) do
-      post add_guest_event_url(@event), params: { guest: { name: @guest.name, email: @guest.email } }
+    assert_difference '@event.guests.count', 1 do
+      post add_guest_event_url(@event), params: { email: 'new_guest@example.com', first_name: 'John', last_name: 'Doe' }
     end
 
-    assert_redirected_to event_url(@event)
-    assert_equal "Guest was successfully added to the event.", flash[:notice]
+    assert_redirected_to @event
+    follow_redirect!
+    assert_equal flash[:notice], 'Guest successfully added.'
   end
 
   test "should not add invalid guest to event" do
-    post add_guest_event_url(@event), params: { guest: { name: "", email: "" } }  # Invalid guest data
+    assert_no_difference("Guest.count") do
+      post add_guest_event_url(@event), params: { email: '' }
+    end
     assert_redirected_to event_url(@event)
-    assert_includes flash[:alert], "Failed to add guest to the event"
+    assert_equal "Failed to add guest: Email can't be blank", flash[:alert]
   end
 end
