@@ -81,10 +81,6 @@
             <%= form.text_area :description, id: :event_description, class: 'form-control', rows: 2 %>
           </div>
 
-<!-- app/views/events/show.html.erb -->
-<h1><%= @event.title %></h1>
-<p><%= @event.description %></p>
-
           <!-- Submit Buttons -->
           <div class="d-flex justify-content-start gap-3 mt-4">
             <%= form.submit "Update Event", class: 'btn btn-primary' %>

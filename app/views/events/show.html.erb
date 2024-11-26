@@ -39,11 +39,6 @@
       </div>
     </div>
 
-
-<This adds a a form for the events show page to invite the guest--> 
-<h1><%= @event.title %></h1>
-<p><%= @event.description %></p>
-
 <%= form_with url: add_guest_to_event_path(@event), method: :post do |f| %>
   <%= f.label :email, "Guest Email" %>
   <%= f.text_field :email %>
