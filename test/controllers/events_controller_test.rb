@@ -63,7 +63,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not create event with invalid data" do
     assert_no_difference("Event.count") do
-      post events_url, params: { event: {title: "test" } }  # Invalid event params
+      post events_url, params: { event: { title: "test" } }  # Invalid event params
     end
     assert_includes flash[:alert], "Failed to create event"
   end
@@ -97,18 +97,18 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should add guest to event" do
-    assert_difference '@event.guests.count', 1 do
-      post add_guest_event_url(@event), params: { email: 'new_guest@example.com', first_name: 'John', last_name: 'Doe' }
+    assert_difference "@event.guests.count", 1 do
+      post add_guest_event_url(@event), params: { email: "new_guest@example.com", first_name: "John", last_name: "Doe" }
     end
 
     assert_redirected_to @event
     follow_redirect!
-    assert_equal flash[:notice], 'Guest successfully added.'
+    assert_equal flash[:notice], "Guest successfully added."
   end
 
   test "should not add invalid guest to event" do
     assert_no_difference("Guest.count") do
-      post add_guest_event_url(@event), params: { email: '' }
+      post add_guest_event_url(@event), params: { email: "" }
     end
     assert_redirected_to event_url(@event)
     assert_equal "Failed to add guest: Email can't be blank", flash[:alert]

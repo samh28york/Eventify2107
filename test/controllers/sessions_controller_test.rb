@@ -20,7 +20,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   # Test for successful user login
   test "should log in guest and redirect to guest home" do
     post user_sessions_path, params: { email: @user.email, password: @user.password }
-    
+
     assert_redirected_to root_path
     assert_equal "Logged in successfully.", flash[:notice]
     assert_equal @user.id, session[:user_id]

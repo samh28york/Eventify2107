@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     member do
       post "add_guest"
     end
-    resources :guests, only: [:create, :update, :destroy] # Nested resource for guests
+    resources :guests, only: [ :create, :update, :destroy ] # Nested resource for guests
   end
 
   resources :guests, only: [ :index ] do

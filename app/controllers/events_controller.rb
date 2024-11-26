@@ -44,7 +44,7 @@ class EventsController < ApplicationController
     # Parse and assign start_time and end_time only if they are provided
     @event.start_time = parse_date_and_time(params[:event][:start_date], params[:event][:start_hour], params[:event][:start_minute], params[:event][:start_period]) if params[:event][:start_hour].present?
     @event.end_time = parse_date_and_time(params[:event][:end_date], params[:event][:end_hour], params[:event][:end_minute], params[:event][:end_period]) if params[:event][:end_hour].present?
-  
+
     # Update the event attributes, ensuring start_time and end_time are part of the event_params
     if @event.update(event_params)
       redirect_to @event, notice: "Event was successfully updated."
@@ -52,7 +52,7 @@ class EventsController < ApplicationController
       render :edit
     end
   end
-  
+
 
   def destroy
     @event.destroy!
@@ -64,12 +64,12 @@ class EventsController < ApplicationController
 
   def add_guest
     @event = Event.find(params[:id])
-   
+
     if params[:email].blank?
       redirect_to @event, alert: "Failed to add guest: Email can't be blank"
       return
     end
-   
+
     @user = User.find_or_create_by(email: params[:email]) do |user|
       user.first_name = params[:first_name]
       user.last_name = params[:last_name]

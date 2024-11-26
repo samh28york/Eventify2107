@@ -11,9 +11,9 @@ class GuestsController < ApplicationController
         user.last_name = params[:last_name]
         user.password = SecureRandom.hex(8)
       end
-  
+
       guest = @event.guests.build(user: @user, role: params[:role] || "guest")
-  
+
       if guest.save
         redirect_to @event, notice: "Guest successfully created."
       else
@@ -23,7 +23,7 @@ class GuestsController < ApplicationController
 
     def update
       guest = @event.guests.find(params[:id])
-  
+
       if guest.update(guest_params)
         redirect_to @event, notice: "Guest information updated successfully."
       else
@@ -33,7 +33,7 @@ class GuestsController < ApplicationController
 
     def destroy
       guest = @event.guests.find(params[:id])
-  
+
       if guest.destroy
         redirect_to @event, notice: "Guest removed successfully."
       else

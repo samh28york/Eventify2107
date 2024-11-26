@@ -9,7 +9,7 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
      email: "guest@example.com",
      password: "password"
    )
-   
+
    post user_sessions_path, params: { email: @user.email, password: "password" }
    assert_response :redirect # Ensure login was successful
    follow_redirect!
@@ -20,5 +20,4 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     get root_url
     assert_response :success
   end
-
 end
