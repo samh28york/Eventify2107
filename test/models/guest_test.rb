@@ -15,74 +15,61 @@ require "test_helper"
 
 class GuestTest < ActiveSupport::TestCase
   def setup
-    @guest = Guest.new(
-      email: "test@example.com",
-      first_name: "Test",
-      last_name: "User",
-      party_size: 2,
+    @user = User.create!(
+      first_name: "John",
+      last_name: "Doe",
+      email: "johndoe@example.com",
       password: "password123",
-      password_confirmation: "password123",
-      phone: "123-456-7890"
+      password_confirmation: "password123"
+    )
+
+    @event = Event.create!(
+      title: "Sample Event",
+      start_date: Time.current + 1.day,
+      end_date: Time.current + 2.days,
+      start_time: Time.current + 1.day + 2.hours,
+      end_time: Time.current + 1.day + 4.hours,
+      location: "Sample Location",
+      description: "Sample Description",
+      user_id: @user.id
+    )
+
+    @guest = Guest.new(
+      user: @user,
+      event: @event,
+      role: "guest",
+      rsvp_status: "pending",
+      party_size: 1
     )
   end
 
-  # Test that a valid guest can be saved
   test "should be valid with all attributes" do
     assert @guest.valid?
   end
 
-  # Test presence and uniqueness validations for email
-  test "should require an email" do
-    @guest.email = nil
+  test "should require a user" do
+    @guest.user = nil
     assert_not @guest.valid?
-    assert_includes @guest.errors[:email], "can't be blank"
+    assert_includes @guest.errors[:user], "must exist"
   end
 
-  test "should require a unique email" do
-    duplicate_guest = @guest.dup
-    @guest.save
-    assert_not duplicate_guest.valid?
-    assert_includes duplicate_guest.errors[:email], "has already been taken"
-  end
-
-  # Test password validations
-  test "should require a password" do
-    @guest.password = nil
+  test "should require an event" do
+    @guest.event = nil
     assert_not @guest.valid?
-    assert_includes @guest.errors[:password], "can't be blank"
+    assert_includes @guest.errors[:event], "must exist"
   end
 
-  test "password should have a minimum length" do
-    @guest.password = "short"
-    assert_not @guest.valid?
-    assert_includes @guest.errors[:password], "is too short (minimum is 6 characters)"
-  end
-
-  # Test associations
-  test "should have many guest lists" do
-    assert_respond_to @guest, :guest_lists
-  end
-
-  test "should have many events through guest lists" do
-    assert_respond_to @guest, :events
-  end
-
-  test "should have many gift registries" do
-    assert_respond_to @guest, :gift_registries
-  end
-
-  test "should have many gifts through gift registries" do
-    assert_respond_to @guest, :gifts
-  end
-
-  # Test `has_secure_password` functionality
-  test "should authenticate with correct password" do
+  test "should have a default rsvp_status of pending" do
+    @guest.rsvp_status = nil
     @guest.save
-    assert @guest.authenticate("password123")
+    assert_equal "pending", @guest.rsvp_status
   end
 
-  test "should not authenticate with incorrect password" do
-    @guest.save
-    assert_not @guest.authenticate("wrongpassword")
+  test "should require a valid role" do
+    assert_raises(ArgumentError) { @guest.role = "invalid_role" }
+  end
+
+  test "should require a valid rsvp_status" do
+    assert_raises(ArgumentError) { @guest.rsvp_status = "invalid_status" }
   end
 end
