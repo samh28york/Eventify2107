@@ -2,7 +2,6 @@
 <div class="container">
 <h1>Welcome, <%= current_user.first_name %>!</h1>
 
-<!-- Flash Messages -->
 <% if flash[:notice] %>
   <div class="alert alert-success">
     <%= flash[:notice] %>
@@ -16,7 +15,7 @@
 <!-- Organized Events Section -->
 <% if @organized_events && @organized_events.any? %>
   <section>
-    <h2>Events You Organized</h2>
+    <h2>Events You Organized:</h2>
     <div class="row">
       <% @organized_events.each do |event| %>
         <div class="col-md-4 mb-4">
@@ -42,7 +41,7 @@
 <!-- Guest Events Section -->
 <% if @guest_events && @guest_events.any? %>
   <section>
-    <h2>Events You're Invited To</h2>
+    <h2>Events You're Invited To:</h2>
     <div class="row">
       <% @guest_events.each do |event| %>
         <div class="col-md-4 mb-4">
