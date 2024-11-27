@@ -1,3 +1,13 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+  <a class="navbar-brand ms-3 box-shadow" href="/"><%= image_tag 'E.png', style: 'height:40px;width:auto;' %> Eventify &nbsp</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+</nav>
+
+
+
 <h1 class="text-center mb-4">Create an Account</h1>
 
 <div class="d-flex justify-content-center align-items-start" style="min-height: 70vh;">
@@ -51,8 +61,10 @@
       <div class="d-flex justify-content-center mt-3">
         <%= form.submit "Create Account", class: 'btn btn-primary w-100' %>
       </div>
-
     <% end %>
-
+    &nbsp
+    <div class="text-center">
+    <p>Already have an account? <%= link_to "Log in", user_sessions_path %></p>
+    </div>
   </div>
 </div>
