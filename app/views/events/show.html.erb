@@ -1,63 +1,87 @@
 <%= render partial: "shared/navbar" %>
 
-<h1 class="text-center mb-4"><%= @event.title %></h1>
+<div class="container">
 
-<div class="container d-flex justify-content-center align-items-start" style="min-height: 70vh; padding-top: 10px; padding-bottom: 30px;">
-  <div class="row w-100">
-    <!-- Left Card (Event Info) -->
-    <div class="col-md-6 mb-4">
-      <div class="card p-4" style="height: auto;">
-        <h3 class="text-center mb-4">Event Information</h3>
-        
-        <!-- Event Date & Time Information -->
-        <div class="mb-3">
-          <p><strong>Date:</strong> <%= @event.start_date.strftime("%B %d, %Y") if @event.start_date %></p>
-        </div>
-        <div class="mb-3">
-          <p><strong>End Date:</strong> <%= @event.end_date.strftime("%B %d, %Y") if @event.end_date %></p>
-        </div>
-        <div class="mb-3">
-          <p><strong>Start Time:</strong> <%= @event.start_time.strftime("%I:%M %p") if @event.start_time %></p>
-        </div>
-        <div class="mb-3">
-          <p><strong>End Time:</strong> <%= @event.end_time.strftime("%I:%M %p") if @event.end_time %></p>
-        </div>
-        <div class="mb-3">
-          <p><strong>Location:</strong> <%= @event.location %></p>
-        </div>
-        <div class="mb-3">
-          <p><strong>Description:</strong> <%= @event.description %></p>
-        </div>
+  <h1 class="text-left mb-4"><%= @event.title %></h1>
 
-        <!-- Action Buttons (Edit, Back to Events, Delete) -->
-        <div class="d-flex gap-3 justify-content-start mt-4">
-          <%  if @event.user_id == @user.id %>
-            <%= link_to 'Edit', edit_event_path(@event), class: 'btn btn-primary' %>
-          <% end %>
-          <%= link_to 'Back to Events', events_path, class: 'btn btn-secondary' %>
-          <%  if @event.user_id == @user.id %>
-            <%= form_with(model: @event, method: :delete, data: { confirm: 'Are you sure you want to delete this event?' }) do |form| %>
-              <%= form.submit 'Delete', class: 'btn btn-danger' %>
+
+    <div class="row w-100">
+      <!-- Left Card (Event Info) -->
+      <div class="col-md-6 mb-4">
+        <div class="card p-4" style="height: auto;">
+          <h3 class="text-center mb-4">Event Information</h3>
+          
+          <!-- Event Date & Time Information -->
+          <div class="mb-3">
+            <p><strong>Date:</strong> <%= @event.start_date.strftime("%B %d, %Y") if @event.start_date %></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>End Date:</strong> <%= @event.end_date.strftime("%B %d, %Y") if @event.end_date %></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>Start Time:</strong> <%= @event.start_time.strftime("%I:%M %p") if @event.start_time %></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>End Time:</strong> <%= @event.end_time.strftime("%I:%M %p") if @event.end_time %></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>Location:</strong> <%= @event.location %></p>
+          </div>
+          <div class="mb-3">
+            <p><strong>Description:</strong> <%= @event.description %></p>
+          </div>
+
+          <!-- Action Buttons (Edit, Back to Events, Delete) -->
+          <div class="d-flex gap-3 justify-content-start mt-4">
+            <%  if @event.user_id == @user.id %>
+              <%= link_to 'Edit', edit_event_path(@event), class: 'btn btn-primary' %>
             <% end %>
-          <% end %>
-        </div>
+            <%= link_to 'All Events', events_path, class: 'btn btn-secondary' %>
+            
+          </div>
 
+        </div>
       </div>
+      
+
+      <%  if @event.user_id == @user.id %>
+        <div class="col-md-6 mb-4">
+          <div class="card p-4" style="height: auto;">
+          <h3 class="text-center mb-4">Guest List</h3>
+          <span class="text-center"><strong>Event Organizer:</strong> <%= @user.first_name + " " + @user.last_name %></span>
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">First</th>
+                  <th scope="col">Last</th>
+                  <th scope="col">Email</th>
+                  <th scope="col" class="text-center">Party Size</th>
+                  <th scope="col" class="text-center">RSVP Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @guests.zip(@users).each do |guest, user| %>
+                  <% unless @event.user_id == user.id %>
+                    <tr>
+                      <td><%= user.first_name %></td>
+                      <td><%= user.last_name %></td>
+                      <td><%= user.email %></td>
+                      <td class="text-center"><%= guest.party_size %></td>
+                      <td class="text-center"><%= guest.rsvp_status %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% end %>
     </div>
-  </div>
+  
 </div>
 
-  <%  if @event.user_id == @user.id %>
-    <%= form_with url: add_guest_to_event_path(@event), method: :post do |f| %>
-      <%= f.label :email, "Guest Email" %>
-      <%= f.text_field :email %>
 
-      <%= f.label :first_name, "Guest First Name" %>
-      <%= f.text_field :first_name %>
+  
 
-      <%= f.label :last_name, "Guest Last Name" %>
-      <%= f.text_field :last_name %>
 
-      <%= f.submit "Add Guest" %>
-    <% end %>
-  <% end %>
+  

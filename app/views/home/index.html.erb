@@ -1,5 +1,6 @@
 <%= render partial: "shared/navbar" %>
 <div class="container">
+
   <h1 class="text-center mb-4">Welcome, <%= current_user.first_name %>!</h1>
 
   <% if flash[:notice] %>
@@ -95,6 +96,7 @@
                   </div>
                 </div>
               </div>
+
             <% end %>
           </div>
         </section>
@@ -102,5 +104,6 @@
         <p>You haven't been invited to any events yet.</p>
       <% end %>
     </div>
+
   </div>
 </div>

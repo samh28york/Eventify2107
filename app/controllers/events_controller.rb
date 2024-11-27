@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_event, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_event, only: [ :show, :edit, :update, :destroy, :delete_guest ]
 
   def index
     @organized_events = Event.where(user_id: current_user.id)
@@ -11,6 +11,13 @@ class EventsController < ApplicationController
   def show
     @event = Event.find(params[:id])
     @user = current_user
+    @guests = @event.guests
+    @users = []
+    @guests.each do |guest|
+      tuser = User.find(guest.user_id)
+      @users << tuser if tuser
+    end
+    @guests.zip @users
   end
 
   def new
@@ -40,7 +47,15 @@ class EventsController < ApplicationController
 
 
   def edit
-    @organized_events
+    @event = Event.find(params[:id])
+    @user = current_user
+    @guests = @event.guests
+    @users = []
+    @guests.each do |guest|
+      tuser = User.find(guest.user_id)
+      @users << tuser if tuser
+    end
+    @guests.zip @users
   end
 
   def update
@@ -67,17 +82,30 @@ class EventsController < ApplicationController
     @user = User.find_or_create_by(email: params[:email]) do |user|
       user.first_name = params[:first_name]
       user.last_name = params[:last_name]
-      user.password = SecureRandom.hex(8) # Generates a random password
+      user.password = user.first_name + user.last_name # Default password is firstname+lastname
     end
 
     guest = @event.guests.find_or_initialize_by(user: @user)
     guest.role ||= "guest"
+    guest.party_size = params[:party_size]
 
     if guest.save
-      redirect_to @event, notice: "Guest successfully added."
+      redirect_to edit_event_path(@event), notice: "Guest was successfully added."
     else
       redirect_to @event, alert: "Failed to add guest: #{guest.errors.full_messages.join(', ')}"
     end
+  end
+
+  def delete_guest
+    @guest = @event.guests.find(params[:guest_id])  # Find the guest by ID
+
+    if @guest.destroy
+      flash[:notice] = "Guest successfully removed."
+    else
+      flash[:alert] = "Failed to remove guest."
+    end
+
+    redirect_to edit_event_path(@event)  # Redirect back to the edit page
   end
 
   private
