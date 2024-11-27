@@ -58,12 +58,11 @@ class GuestTest < ActiveSupport::TestCase
     assert_not @guest.valid?
     assert_includes @guest.errors[:event], "must exist"
   end
-
-  # test "should have a default rsvp_status of pending" do
-  #   @guest.rsvp_status = nil
-  #   @guest.save
-  #   assert_equal "pending", @guest.rsvp_status
-  # end
+  
+  test "should have a default rsvp_status of pending" do
+    new_guest = Guest.new(user: @user)
+    assert_equal "pending", @guest.rsvp_status
+  end
 
   test "should require a valid role" do
     assert_raises(ArgumentError) { @guest.role = "invalid_role" }
