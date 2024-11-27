@@ -35,11 +35,10 @@
           </div>
         <% end %>
       </div>
-    </div>
+    
 
-    <div class="row">
-    <!-- Guest Events -->
-    <div class="col-md-6 col-12 mb-4">
+      <!-- Guest Events -->
+    
       <div class="row">
         <% @guest_events.each do |event| %>
           <div class="col-12 mb-4">
@@ -63,34 +62,35 @@
       </div>
     </div>
 
-
-    <!-- Calendar Section (Right Side) -->
     <div class="col-md-6 col-12 mb-4">
-      <div class="card shadow-sm">
-        <div class="card-header">
-          <h5 class="card-title mb-0">Event Calendar</h5>
-        </div>
+      <!-- Calendar Section (Right Side) -->
+      
+        <div class="card shadow-sm">
+          <div class="card-header">
+            <h5 class="card-title mb-0">Event Calendar</h5>
+          </div>
 
-        <div class="card-body">
-          <%= month_calendar(events: @events, start_day: :sunday) do |date, events| %>
-            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; justify-items: center;">
-              <div style="padding: 2px; height: auto; min-height: 40px; width: 40px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; font-size: 10px;">
-                <div style="font-weight: bold; margin-bottom: 2px; font-size: 14px;">
-                  <%= date.day %>
-                </div>
+          <div class="card-body">
+            <%= month_calendar(events: @events, start_day: :sunday) do |date, events| %>
+              <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; justify-items: center;">
+                <div style="padding: 2px; height: auto; min-height: 40px; width: 40px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; font-size: 10px;">
+                  <div style="font-weight: bold; margin-bottom: 2px; font-size: 14px;">
+                    <%= date.day %>
+                  </div>
 
-                <% events.each do |event| %>
-                  <% if date >= event.start_date && date <= event.end_date %>
-                    <div class="event-button-wrapper" style="height: auto;">
-                      <%= link_to event.title, event_path(event), class: "btn btn-primary btn-sm multi-day-event", style: "font-size: 12px; padding: 2px 5px; margin-bottom: 2px;" %>
-                    </div>
+                  <% events.each do |event| %>
+                    <% if date >= event.start_date && date <= event.end_date %>
+                      <div class="event-button-wrapper" style="height: auto;">
+                        <%= link_to event.title, event_path(event), class: "btn btn-primary btn-sm multi-day-event", style: "font-size: 12px; padding: 2px 5px; margin-bottom: 2px;" %>
+                      </div>
+                    <% end %>
                   <% end %>
-                <% end %>
+                </div>
               </div>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
-      </div>
+      
     </div>
   </div>
 </div>
