@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :events do
     member do
       post :add_guest # Route to add a guest to a specific event
+      delete 'delete_guest/:guest_id', to: 'events#delete_guest', as: 'delete_guest'
     end
     
     resources :guests, only: [ :create, :update, :destroy ] # Nested resource for guests

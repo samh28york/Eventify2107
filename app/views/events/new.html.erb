@@ -76,11 +76,11 @@
         <%= form.label :description, class: 'form-label' %>
         <%= form.text_area :description, id: :event_description, class: 'form-control', rows: 2 %>
       </div>
-
       <div class="d-flex justify-content-between">
-        <%= form.submit "Create Event", class: 'btn btn-primary' %>
         <%= link_to 'Back to Events', events_path, class: 'btn btn-secondary' %>
+        <%= form.submit "Create Event", class: 'btn btn-primary' %>
       </div>
+
     <% end %>
   </div>
 </div>
