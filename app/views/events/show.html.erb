@@ -31,26 +31,33 @@
 
         <!-- Action Buttons (Edit, Back to Events, Delete) -->
         <div class="d-flex gap-3 justify-content-start mt-4">
-          <%= link_to 'Edit', edit_event_path(@event), class: 'btn btn-primary' %>
+          <%  if @event.user_id == @user.id %>
+            <%= link_to 'Edit', edit_event_path(@event), class: 'btn btn-primary' %>
+          <% end %>
           <%= link_to 'Back to Events', events_path, class: 'btn btn-secondary' %>
-          <%= form_with(model: @event, method: :delete, data: { confirm: 'Are you sure you want to delete this event?' }) do |form| %>
-            <%= form.submit 'Delete', class: 'btn btn-danger' %>
+          <%  if @event.user_id == @user.id %>
+            <%= form_with(model: @event, method: :delete, data: { confirm: 'Are you sure you want to delete this event?' }) do |form| %>
+              <%= form.submit 'Delete', class: 'btn btn-danger' %>
+            <% end %>
           <% end %>
         </div>
 
       </div>
     </div>
+  </div>
+</div>
 
-<%= form_with url: add_guest_to_event_path(@event), method: :post do |f| %>
-  <%= f.label :email, "Guest Email" %>
-  <%= f.text_field :email %>
+  <%  if @event.user_id == @user.id %>
+    <%= form_with url: add_guest_to_event_path(@event), method: :post do |f| %>
+      <%= f.label :email, "Guest Email" %>
+      <%= f.text_field :email %>
 
-  <%= f.label :first_name, "Guest First Name" %>
-  <%= f.text_field :first_name %>
+      <%= f.label :first_name, "Guest First Name" %>
+      <%= f.text_field :first_name %>
 
-  <%= f.label :last_name, "Guest Last Name" %>
-  <%= f.text_field :last_name %>
+      <%= f.label :last_name, "Guest Last Name" %>
+      <%= f.text_field :last_name %>
 
-  <%= f.submit "Add Guest" %>
-<% end %>
-
+      <%= f.submit "Add Guest" %>
+    <% end %>
+  <% end %>
