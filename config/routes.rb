@@ -13,7 +13,8 @@ Rails.application.routes.draw do
     member do
       post :add_guest # Route to add a guest to a specific event
     end
-    resources :guests, only: [:create, :update, :destroy] # For managing guests CRUD ops 
+    
+    resources :guests, only: [ :create, :update, :destroy ] # Nested resource for guests
   end
 
   resources :guests, only: [ :index ] do
