@@ -60,8 +60,7 @@ class GuestTest < ActiveSupport::TestCase
   end
 
   test "should have a default rsvp_status of pending" do
-    @guest.rsvp_status = nil
-    @guest.save
+    new_guest = Guest.new(user: @user)
     assert_equal "pending", @guest.rsvp_status
   end
 
