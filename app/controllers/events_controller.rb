@@ -76,7 +76,8 @@ class EventsController < ApplicationController
       user.password = SecureRandom.hex(8) # Generates a random password
     end
 
-    guest = @event.guests.build(user: @user, role: "guest")
+    guest = @event.guests.find_or_initialize_by(user: @user)
+    guest.role ||= "guest"
 
     if guest.save
       redirect_to @event, notice: "Guest successfully added."
