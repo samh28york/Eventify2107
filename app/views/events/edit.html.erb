@@ -92,7 +92,37 @@
       </div>
     </div>
 
+    <!-- Right Card (Guest List Form) -->
+    <div class="col-md-6 mb-4">
+      <div class="card p-4" style="height: auto;">
+        <h3 class="text-center mb-4">Add Guest</h3>
+
+        <%= form_with url: add_guest_to_event_path(@event), method: :post, local: true do |f| %>
+
+          <!-- Guest Email -->
+          <div class="mb-3">
+            <%= f.label :email, "Guest Email", class: 'form-label' %>
+            <%= f.text_field :email, class: 'form-control' %>
+          </div>
+
+          <!-- Guest First Name -->
+          <div class="mb-3">
+            <%= f.label :first_name, "Guest First Name", class: 'form-label' %>
+            <%= f.text_field :first_name, class: 'form-control' %>
+          </div>
+
+          <!-- Guest Last Name -->
+          <div class="mb-3">
+            <%= f.label :last_name, "Guest Last Name", class: 'form-label' %>
+            <%= f.text_field :last_name, class: 'form-control' %>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-start gap-3 mt-4">
+            <%= f.submit "Add Guest", class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
-
