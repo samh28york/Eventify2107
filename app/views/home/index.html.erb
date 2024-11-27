@@ -1,104 +1,109 @@
 <%= render partial: "shared/navbar" %>
 <div class="container">
-<h1 class="text-center mb-4">Welcome, <%= current_user.first_name %>!</h1>
 
-<% if flash[:notice] %>
-  <div class="alert alert-success">
-    <%= flash[:notice] %>
-  </div>
-<% elsif flash[:alert] %>
-  <div class="alert alert-danger">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
+  <h1 class="text-center mb-4">Welcome, <%= current_user.first_name %>!</h1>
 
+  <% if flash[:notice] %>
+    <div class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% elsif flash[:alert] %>
+    <div class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
 
-<div class="row">
-
-  <div class="col-md-6 col-12 mb-4">
-
-    <!-- Organized Events Section -->
-    <% if @organized_events && @organized_events.any? %>
-      <section>
-        <h2 class="text-center">Events You Organized:</h2>
-        <div class="row">
-          <% @organized_events.each do |event| %>
-            <div class="col-12 mb-4">
-              <div class="card shadow-sm">
-                <div class="card-header d-flex align-items-center">
-                  <h3 class="card-title"><%= event.title %></h3>
-                </div>
-                <div class="card-body">
-                  <p class="card-text"><strong>Location:</strong> <%= event.location %></p>
-                  <p class="card-text"><strong>Description:</strong> <%= event.description %></p>
-                  <p class="card-text"><strong>Start Date:</strong> <%= event.start_date.strftime("%B %d, %Y") %></p>
-                  <p class="card-text"><strong>Start Time:</strong> <%= event.start_time.strftime("%I:%M %p") %></p>
-                  <p class="card-text"><strong>End Date:</strong> <%= event.end_date.strftime("%B %d, %Y") %></p>
-                  <p class="card-text"><strong>End Time:</strong> <%= event.end_time.strftime("%I:%M %p") %></p>
-                </div>
+  <div class="row">
+    <div class="col-md-6 col-12 mb-4">
+      <!-- Organized Events Section -->
+      <h2>Events You Organized:</h2>
+      <% if @organized_events && @organized_events.any? %>
+        <section>
+          <div class="row">
+            <% @organized_events.each do |event| %>
+              <div class="col-12 mb-4">
+                <a href="<%= event_path(event) %>" class="text-decoration-none">
+                  <div class="card shadow-sm">
+                    <div class="card-header d-flex align-items-center">
+                      <h3 class="card-title"><%= event.title %></h3>
+                    </div>
+                    <div class="card-body">
+                      <p class="card-text"><strong>Location:</strong> <%= event.location %></p>
+                      <p class="card-text"><strong>Description:</strong> <%= event.description %></p>
+                      <p class="card-text"><strong>Start Date:</strong> <%= event.start_date.strftime("%B %d, %Y") %></p>
+                      <p class="card-text"><strong>Start Time:</strong> <%= event.start_time.strftime("%I:%M %p") %></p>
+                      <p class="card-text"><strong>End Date:</strong> <%= event.end_date.strftime("%B %d, %Y") %></p>
+                      <p class="card-text"><strong>End Time:</strong> <%= event.end_time.strftime("%I:%M %p") %></p>
+                    </div>
+                  </div>
+                </a>
               </div>
-            </div>
-          <% end %>
-        </div>
-      </section>
-    <% else %>
-      <p class="text-center">You haven't organized any events yet.</p>
-    <% end %>
+            <% end %>
+          </div>
+        </section>
+      <% else %>
+        <p>You haven't organized any events yet.</p>
+      <% end %>
+    </div>
 
-  </div>
-
-
-
-  <div class="col-md-6 col-12 mb-4">
-
-    <!-- Guest Events Section -->
-    <% if @guest_events && @guest_events.any? %>
-      <section>
-        <h2 class="text-center">Events You're Invited To:</h2>
-        <div class="row">
-          <% @guest_events.each do |event| %>
-            <div class="col-12 mb-4">
-              <div class="card shadow-sm">
-                <div class="card-header d-flex align-items-center">
-                  <h3 class="card-title"><%= event.title %></h3>
-                </div>
-                <div class="card-body">
-                  <p class="card-text"><strong>Location:</strong> <%= event.location %></p>
-                  <p class="card-text"><strong>Description:</strong> <%= event.description %></p>
-                  <p class="card-text"><strong>Start Date:</strong> <%= event.start_date.strftime("%B %d, %Y") %></p>
-                  <p class="card-text"><strong>Start Time:</strong> <%= event.start_time.strftime("%I:%M %p") %></p>
-                  <p class="card-text"><strong>End Date:</strong> <%= event.end_date.strftime("%B %d, %Y") %></p>
-                  <p class="card-text"><strong>End Time:</strong> <%= event.end_time.strftime("%I:%M %p") %></p>
+    <div class="col-md-6 col-12 mb-4">
+      <!-- Guest Events Section -->
+      <h2>Events You're Invited To:</h2>
+      <% if @guest_events && @guest_events.any? %>
+        <section>
+          <div class="row">
+            <% @guest_events.each do |event| %>
+              <div class="col-12 mb-4">
+                <div class="card shadow-sm">
+                  <a href="<%= event_path(event) %>" class="text-decoration-none text-dark">
+                    <div class="card-header d-flex align-items-center">
+                      <h3 class="card-title"><%= event.title %></h3>
+                    </div>
+                    <div class="card-body">
+                      <p class="card-text"><strong>Location:</strong> <%= event.location %></p>
+                      <p class="card-text"><strong>Description:</strong> <%= event.description %></p>
+                      <p class="card-text"><strong>Start Date:</strong> <%= event.start_date.strftime("%B %d, %Y") %></p>
+                      <p class="card-text"><strong>Start Time:</strong> <%= event.start_time.strftime("%I:%M %p") %></p>
+                      <p class="card-text"><strong>End Date:</strong> <%= event.end_date.strftime("%B %d, %Y") %></p>
+                      <p class="card-text"><strong>End Time:</strong> <%= event.end_time.strftime("%I:%M %p") %></p>
+                    </div>
+                  </a>
 
                   <!-- RSVP Form -->
                   <% guest_entry = Guest.find_by(user_id: current_user.id, event_id: event.id) %>
-                  <%= form_with url: update_attendance_guests_path, method: :patch, local: true do |form| %>
-                    <%= form.hidden_field :event_id, value: event.id %>
-                    <div class="rsvp-options mt-3">
-                      <%= form.radio_button :rsvp_status, 'accepted', checked: guest_entry&.rsvp_status == 'accepted' %>
-                      <%= form.label :rsvp_status_accepted, 'Accepted' %>
+                  <div class="card-footer">
+                    <%= form_with url: update_attendance_guests_path, method: :patch, local: true do |form| %>
+                      <%= form.hidden_field :event_id, value: event.id %>
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                          <%= form.radio_button :rsvp_status, 'accepted', checked: guest_entry&.rsvp_status == 'accepted', class: 'form-check-input' %>
+                          <%= form.label :rsvp_status_accepted, 'Accept', class: 'form-check-label ms-2' %>
+                        </div>
 
-                      <%= form.radio_button :rsvp_status, 'declined', checked: guest_entry&.rsvp_status == 'declined' %>
-                      <%= form.label :rsvp_status_declined, 'Declined' %>
+                        <div class="form-check">
+                          <%= form.radio_button :rsvp_status, 'declined', checked: guest_entry&.rsvp_status == 'declined', class: 'form-check-input' %>
+                          <%= form.label :rsvp_status_declined, 'Decline', class: 'form-check-label ms-2' %>
+                        </div>
 
-                      <%= form.radio_button :rsvp_status, 'pending', checked: guest_entry&.rsvp_status == 'pending' %>
-                      <%= form.label :rsvp_status_pending, 'Pending' %>
-                    </div>
-                    <%= form.submit 'RSVP', class: "btn btn-primary mt-3" %>
-                  <% end %>
+                        <div class="form-check">
+                          <%= form.radio_button :rsvp_status, 'pending', checked: guest_entry&.rsvp_status == 'pending', class: 'form-check-input' %>
+                          <%= form.label :rsvp_status_pending, 'Tentative', class: 'form-check-label ms-2' %>
+                        </div>
+
+                        <%= form.submit 'RSVP', class: "btn btn-primary ms-3" %>
+                      </div>
+                    <% end %>
+                  </div>
                 </div>
               </div>
-            </div>
-          <% end %>
-        </div>
-      </section>
-    <% else %>
-      <p class="text-center">You haven't been invited to any events yet.</p>
-    <% end %>
-    <div>
-    
+
+            <% end %>
+          </div>
+        </section>
+      <% else %>
+        <p>You haven't been invited to any events yet.</p>
+      <% end %>
+    </div>
+
   </div>
-
-
 </div>
-
