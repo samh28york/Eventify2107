@@ -1,6 +1,7 @@
 <%= render partial: "shared/navbar" %>
+
 <div class="container">
-<h1 class="text-left mb-4">All Events</h1>
+  <h1 class="text-left mb-4">All Events</h1>
 
   <div class="row mb-3">
     <div class="col-12">
@@ -12,7 +13,7 @@
     <!-- Event Cards Section (Left Side) -->
     <div class="col-md-6 col-12 mb-4">
       <div class="row">
-        <% @events.each do |event| %>
+        <% @organized_events.each do |event| %>
           <div class="col-12 mb-4">
             <div class="card shadow-sm">
               <div class="card-header d-flex align-items-center">
@@ -35,6 +36,33 @@
         <% end %>
       </div>
     </div>
+
+    <div class="row">
+    <!-- Guest Events -->
+    <div class="col-md-6 col-12 mb-4">
+      <div class="row">
+        <% @guest_events.each do |event| %>
+          <div class="col-12 mb-4">
+            <div class="card shadow-sm">
+              <div class="card-header d-flex align-items-center">
+                <h5 class="card-title mb-0"><%= event.title %></h5>
+              </div>
+              <div class="card-body">
+                <strong>Date:</strong> <%= event.start_date.strftime("%B %d, %Y") if event.start_date %><br>
+                <strong>End Date:</strong> <%= event.end_date.strftime("%B %d, %Y") if event.end_date %><br>
+                <strong>Start Time:</strong> <%= event.start_time.strftime("%I:%M %p") if event.start_time %><br>
+                <strong>End Time:</strong> <%= event.end_time.strftime("%I:%M %p") if event.end_time %><br>
+                <strong>Location:</strong> <%= event.location %>
+              </div>
+              <div class="card-footer text-end">
+                <%= link_to 'View', event_path(event), class: 'btn btn-primary btn-sm' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
 
     <!-- Calendar Section (Right Side) -->
     <div class="col-md-6 col-12 mb-4">
