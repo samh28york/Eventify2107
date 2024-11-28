@@ -3,6 +3,10 @@
 # Eventify
 **Events Simplified!**
 
+## Project Demo
+
+[Click here to watch the video on Google Drive](https://drive.google.com/file/d/1ZuQlHA2Z8VHYnc2MAIkYjoxhh-KyHA2E/preview)
+
 ## Table of Contents
 - [Vision](#vision)
 - [Features](#features)
@@ -26,4 +30,6 @@ Planning events can be a daunting task, requiring the coordination of multiple e
 
 ## Run the Server
 1. Run 'rails s' to run the server, you will be taken to the login page. You can either use a user login from the seeds.rb file or create your own user.
+
+
 
