@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       delete 'delete_guest/:guest_id', to: 'events#delete_guest', as: 'delete_guest'
     end
     
-    resources :guests, only: [ :create, :update, :destroy ] # Nested resource for guests
+    resources :guests, only: [ :index, :create, :update, :destroy ] # Nested resource for guests
   end
 
   resources :guests, only: [ :index ] do
