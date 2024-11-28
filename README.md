@@ -3,14 +3,15 @@
 # Eventify
 **Events Simplified!**
 
-## Project Demo
-
-[Click here to watch the video on Google Drive](https://drive.google.com/file/d/1ZuQlHA2Z8VHYnc2MAIkYjoxhh-KyHA2E/preview)
-
 ## Table of Contents
+- [Project Demo](#projectdemo)
 - [Vision](#vision)
 - [Features](#features)
 - [Installation](#installation)
+
+## Project Demo
+
+[Click here to watch the video on Google Drive](https://drive.google.com/file/d/1ZuQlHA2Z8VHYnc2MAIkYjoxhh-KyHA2E/preview)
 
 ## Vision
 Planning events can be a daunting task, requiring the coordination of multiple elements such as guest lists, and event details. For professional planners, managing this complexity efficiently is crucial, while non-professionals often lack the skills to do this effectively. This project aims to simplify and streamline event organization by providing an intuitive platform that meets the needs of both professionals and casual planners through leveraging technology via a web application.
